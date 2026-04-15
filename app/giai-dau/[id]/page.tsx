@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { BarChart2, Calendar, ChevronLeft, ChevronRight, Globe } from 'lucide-react'
-import { getLeagueById, getLeagueRounds, getLeagueFixturesByRound } from '@/lib/services/league'
+import { getLeagueById, getLeagueRounds, getLeagueFixturesByRound, getCurrentRound } from '@/lib/services/league'
 import { getStandings, CURRENT_SEASON, TRACKED_LEAGUES } from '@/lib/services/standings'
 import FixtureList from '@/components/ui/FixtureList'
 import StandingsTable from '@/components/ui/StandingsTable'
@@ -39,7 +39,7 @@ async function StandingsSection({ leagueId }: { leagueId: number }) {
 // Lịch thi đấu theo vòng
 async function FixturesSection({ leagueId, season, round }: { leagueId: number; season: number; round: string }) {
   const fixtures = await getLeagueFixturesByRound(leagueId, season, round)
-  return <FixtureList fixtures={fixtures} emptyMessage="Không có trận đấu nào trong vòng này" />
+  return <FixtureList fixtures={fixtures} showDate emptyMessage="Không có trận đấu nào trong vòng này" />
 }
 
 export default async function GiaiDauPage(props: PageProps<'/giai-dau/[id]'>) {
@@ -59,8 +59,11 @@ export default async function GiaiDauPage(props: PageProps<'/giai-dau/[id]'>) {
   // Resolve đúng season cho từng giải (V.League = 2026, châu Âu = 2025)
   const leagueSeason = TRACKED_LEAGUES.find(l => l.id === leagueId)?.season ?? CURRENT_SEASON
 
-  // Vòng đấu hiện tại: dùng param hoặc vòng cuối cùng trong danh sách
-  const currentRound = typeof roundParam === 'string' ? roundParam : (rounds[rounds.length - 1] ?? '')
+  // Vòng hiện tại: dùng param URL nếu có, không thì tự tìm vòng đang diễn ra
+  const currentRound = typeof roundParam === 'string' && roundParam
+    ? roundParam
+    : await getCurrentRound(leagueId, leagueSeason, rounds)
+
   const currentRoundIndex = rounds.indexOf(currentRound)
   const prevRound = currentRoundIndex > 0 ? rounds[currentRoundIndex - 1] : null
   const nextRound = currentRoundIndex < rounds.length - 1 ? rounds[currentRoundIndex + 1] : null

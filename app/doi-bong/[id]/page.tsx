@@ -132,7 +132,7 @@ async function FixturesSection({ teamId, leagueId }: { teamId: number; leagueId:
         <div>
           <p className="text-xs font-semibold text-gray-500 mb-2">Sắp thi đấu</p>
           <div className="rounded-xl border border-gray-100 overflow-hidden">
-            <FixtureList fixtures={next} emptyMessage="" />
+            <FixtureList fixtures={next} showDate emptyMessage="" />
           </div>
         </div>
       )}
@@ -140,7 +140,7 @@ async function FixturesSection({ teamId, leagueId }: { teamId: number; leagueId:
         <div>
           <p className="text-xs font-semibold text-gray-500 mb-2">Kết quả gần đây</p>
           <div className="rounded-xl border border-gray-100 overflow-hidden">
-            <FixtureList fixtures={[...last].reverse()} emptyMessage="" />
+            <FixtureList fixtures={[...last].reverse()} showDate emptyMessage="" />
           </div>
         </div>
       )}

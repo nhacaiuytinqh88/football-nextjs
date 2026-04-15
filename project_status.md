@@ -35,10 +35,18 @@
   - [x] Trang `/giai-dau/[id]`: BXH + lịch theo vòng
   - [x] Trang `/doi-bong/[id]`: thống kê + lịch thi đấu
   - [x] Deploy Netlify, 3 Scheduled Functions hoạt động
-- [x] **Đang thực hiện:**
-  - [x] Redesign bảng xếp hạng: component `StandingsTable` dùng chung, bỏ đường kẻ, tô màu tên đội + số thứ hạng theo zone (Champions/Europa/Conference/Relegation), form dots 5 trận gần nhất
-  - [x] Thay toàn bộ emoji flag bằng logo image từ API-Football (đồng bộ trên mọi thiết bị)
-  - [x] `LeftSidebar` dùng logo giải đấu thay vì emoji
+- [x] **Post-launch fixes:**
+  - [x] Chuẩn hóa timezone UTC+7 toàn dự án → `lib/date.ts`
+  - [x] Fix stale live cache: `FIXTURES_TODAY` TTL 5 phút, cron fixtures mỗi 5 phút
+  - [x] Trang `/giai-dau/[id]`: BXH + lịch theo vòng
+  - [x] Trang `/doi-bong/[id]`: thống kê + lịch thi đấu
+  - [x] Deploy Netlify, 3 Scheduled Functions hoạt động
+  - [x] Redesign BXH: `StandingsTable` component dùng chung, tô màu zone, form dots
+  - [x] Thay emoji bằng logo image từ API-Football
+  - [x] Fix season: EU=2025, V.League=2026, V.League ID 197→340
+- [ ] **Đang thực hiện:**
+  - [ ] MatchRow/MatchStatusBadge: hiển thị thêm ngày (không chỉ giờ)
+  - [ ] Trang giải đấu: mặc định hiển thị vòng hiện tại thay vì vòng mới nhất
 
 ## 6. Installed Dependencies
 ```json

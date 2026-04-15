@@ -5,10 +5,10 @@ import type { Fixture } from '@/lib/api-football'
 interface Props {
   fixtures: Fixture[]
   emptyMessage?: string
+  showDate?: boolean // Truyền xuống MatchRow để hiện ngày (dùng trong trang giải đấu/đội bóng)
 }
 
-// Server Component - nhóm các trận theo giải đấu và render danh sách
-export default function FixtureList({ fixtures, emptyMessage = 'Không có trận đấu nào' }: Props) {
+export default function FixtureList({ fixtures, emptyMessage = 'Không có trận đấu nào', showDate = false }: Props) {
   if (fixtures.length === 0) {
     return (
       <div className="px-4 py-10 text-center text-sm text-gray-400">
@@ -17,7 +17,6 @@ export default function FixtureList({ fixtures, emptyMessage = 'Không có trậ
     )
   }
 
-  // Nhóm trận theo league.id
   const grouped = fixtures.reduce<Record<number, Fixture[]>>((acc, fixture) => {
     const id = fixture.league.id
     if (!acc[id]) acc[id] = []
@@ -38,7 +37,7 @@ export default function FixtureList({ fixtures, emptyMessage = 'Không có trậ
               round={league.round}
             />
             {group.map((fixture) => (
-              <MatchRow key={fixture.fixture.id} fixture={fixture} />
+              <MatchRow key={fixture.fixture.id} fixture={fixture} showDate={showDate} />
             ))}
           </div>
         )

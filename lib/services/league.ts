@@ -45,3 +45,57 @@ export async function getLeagueFixturesByRound(
   await redis.set(cacheKey, fixtures, { ex: CACHE_TTL.LEAGUE_FIXTURES })
   return fixtures
 }
+
+/**
+ * Tìm vòng đấu hiện tại thông minh:
+ * - Ưu tiên vòng có trận đang LIVE
+ * - Nếu không có LIVE, lấy vòng gần nhất có trận đã kết thúc hoặc sắp diễn ra trong 3 ngày tới
+ * - Fallback: vòng cuối cùng trong danh sách
+ */
+export async function getCurrentRound(
+  leagueId: number,
+  season: number,
+  rounds: string[]
+): Promise<string> {
+  if (rounds.length === 0) return ''
+
+  const now = Date.now()
+  const threeDaysMs = 3 * 24 * 60 * 60 * 1000
+
+  // Duyệt từ vòng cuối về đầu để tìm vòng gần nhất có trận
+  // Chỉ check 5 vòng gần nhất để tránh gọi API quá nhiều
+  const recentRounds = rounds.slice(-5)
+
+  for (let i = recentRounds.length - 1; i >= 0; i--) {
+    const round = recentRounds[i]
+    try {
+      const fixtures = await getLeagueFixturesByRound(leagueId, season, round)
+      if (fixtures.length === 0) continue
+
+      // Có trận LIVE → đây là vòng hiện tại
+      const hasLive = fixtures.some(f =>
+        ['1H', '2H', 'HT', 'ET', 'BT', 'P'].includes(f.fixture.status.short)
+      )
+      if (hasLive) return round
+
+      // Có trận chưa đá trong 3 ngày tới → vòng sắp diễn ra
+      const hasUpcoming = fixtures.some(f => {
+        if (f.fixture.status.short !== 'NS') return false
+        const diff = new Date(f.fixture.date).getTime() - now
+        return diff >= 0 && diff <= threeDaysMs
+      })
+      if (hasUpcoming) return round
+
+      // Có trận đã kết thúc → đây là vòng gần nhất đã chơi
+      const hasFinished = fixtures.some(f =>
+        ['FT', 'AET', 'PEN'].includes(f.fixture.status.short)
+      )
+      if (hasFinished) return round
+    } catch {
+      continue
+    }
+  }
+
+  // Fallback: vòng cuối cùng
+  return rounds[rounds.length - 1]
+}

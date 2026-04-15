@@ -29,6 +29,28 @@ export function formatMatchTime(isoDate: string): string {
 }
 
 /**
+ * Format ngày thi đấu ngắn → "T7 14/06" (giờ VN)
+ * Dùng cho: MatchStatusBadge khi trận không phải hôm nay
+ */
+export function formatMatchDate(isoDate: string): string {
+  return new Date(isoDate).toLocaleDateString(VN_LOCALE, {
+    weekday: 'short',
+    day: '2-digit',
+    month: '2-digit',
+    timeZone: VN_TIMEZONE,
+  })
+}
+
+/**
+ * Kiểm tra ISO date có phải hôm nay (giờ VN) không
+ */
+export function isToday(isoDate: string): boolean {
+  const today = getVNDateString(0)
+  const dateStr = new Date(isoDate).toLocaleDateString('en-CA', { timeZone: VN_TIMEZONE })
+  return dateStr === today
+}
+
+/**
  * Format ngày + giờ đầy đủ → "21:00 - 15/06/2025" (giờ VN)
  * Dùng cho: chi tiết trận đấu
  */
