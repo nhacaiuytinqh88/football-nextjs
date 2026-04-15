@@ -15,7 +15,7 @@ import type { FixtureOdds } from '@/lib/api-football'
 import { BookmakerSelect } from './BookmakerSelect'
 import { OddsMatchRow } from './OddsMatchRow'
 import PageContentSection from '@/components/ui/PageContent'
-import { getPageContent } from '@/lib/services/content'
+import { getPageContent, getCurrentPageContent } from '@/lib/services/content'
 
 export const metadata: Metadata = {
   title: 'Tỷ lệ kèo bóng đá',
@@ -157,7 +157,8 @@ async function OddsSection({ leagueId, bookmakerId }: { leagueId: number; bookma
 }
 
 export default async function TyLeKeoPage(props: PageProps<'/ty-le-keo'>) {
-  const { league: leagueParam, bookmaker: bookmakerParam } = await props.searchParams ?? {}
+  const searchParams = await props.searchParams ?? {}
+  const { league: leagueParam, bookmaker: bookmakerParam } = searchParams
   const selectedLeagueId = typeof leagueParam === 'string'
     ? parseInt(leagueParam)
     : TRACKED_LEAGUES[0].id
@@ -168,11 +169,14 @@ export default async function TyLeKeoPage(props: PageProps<'/ty-le-keo'>) {
 
   const selectedLeague = TRACKED_LEAGUES.find(l => l.id === selectedLeagueId) ?? TRACKED_LEAGUES[0]
   
-  // Lấy danh sách bookmakers và nội dung hướng dẫn
-  const [bookmakers, oddsGuide] = await Promise.all([
+  // Lấy danh sách bookmakers và nội dung - ưu tiên content có query params
+  const [bookmakers, pageContentWithParams] = await Promise.all([
     getBookmakers(),
-    getPageContent('odds_guide'),
+    getCurrentPageContent('/ty-le-keo', searchParams),
   ])
+  const pageContentDefault = pageContentWithParams ? null : await getPageContent('odds')
+  const oddsGuide = pageContentWithParams || pageContentDefault
+  
   const selectedBookmaker = bookmakers.find(b => b.id === selectedBookmakerId) ?? { id: 8, name: 'Bet365' }
 
   return (

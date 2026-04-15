@@ -6,7 +6,7 @@ import FixtureList from '@/components/ui/FixtureList'
 import { getFixturesByDate } from '@/lib/services/fixtures'
 import { getVNDateString, formatShortDate } from '@/lib/date'
 import PageContentSection from '@/components/ui/PageContent'
-import { getPageContent } from '@/lib/services/content'
+import { getPageContent, getCurrentPageContent } from '@/lib/services/content'
 
 export const metadata: Metadata = {
   title: 'Lịch thi đấu bóng đá hôm nay',
@@ -47,7 +47,8 @@ async function FixturesForDate({ date }: { date: string }) {
 
 // Page nhận searchParams để chọn ngày
 export default async function LichThiDauPage(props: PageProps<'/lich-thi-dau'>) {
-  const { date: dateParam } = await props.searchParams ?? {}
+  const searchParams = await props.searchParams ?? {}
+  const { date: dateParam } = searchParams
   const today = getVNDate(0)
   const selectedDate = (typeof dateParam === 'string' && dateParam) ? dateParam : today
 
@@ -59,8 +60,10 @@ export default async function LichThiDauPage(props: PageProps<'/lich-thi-dau'>) 
   const nextDate = new Date(selectedDate)
   nextDate.setDate(nextDate.getDate() + 1)
   
-  // Lấy nội dung trang (nếu có)
-  const pageContent = await getPageContent('fixtures')
+  // Lấy nội dung trang - ưu tiên content có query params, fallback về trang chính
+  const pageContentWithParams = await getCurrentPageContent('/lich-thi-dau', searchParams)
+  const pageContentDefault = pageContentWithParams ? null : await getPageContent('fixtures')
+  const pageContent = pageContentWithParams || pageContentDefault
 
   return (
     <div className="space-y-3">

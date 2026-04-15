@@ -309,7 +309,33 @@ export default function ArticleForm({ initialData }: Props) {
                 <li>Hiển thị tại: /lich-thi-dau</li>
               </>
             )}
+            {form.page_type === 'general' && (
+              <>
+                <li>Nhập page_path thủ công bên dưới</li>
+                <li>VD: /bang-xep-hang?league=135</li>
+                <li>VD: /ty-le-keo?bookmaker=8&league=39</li>
+              </>
+            )}
           </ul>
+        </div>
+      )}
+
+      {/* Page Path - cho phép nhập thủ công khi chọn "Khác" */}
+      {form.content_type === 'page_content' && form.page_type === 'general' && (
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-gray-700">
+            Page Path <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={form.page_path}
+            onChange={(e) => setForm((f) => ({ ...f, page_path: e.target.value }))}
+            placeholder="/bang-xep-hang?league=135"
+            className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm font-mono outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
+          />
+          <p className="mt-1 text-xs text-gray-400">
+            Nhập đường dẫn đầy đủ, có thể bao gồm query params
+          </p>
         </div>
       )}
 

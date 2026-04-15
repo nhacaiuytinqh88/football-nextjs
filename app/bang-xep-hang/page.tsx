@@ -5,7 +5,7 @@ import { BarChart2 } from 'lucide-react'
 import { getStandings, TRACKED_LEAGUES, CURRENT_SEASON } from '@/lib/services/standings'
 import StandingsTable from '@/components/ui/StandingsTable'
 import PageContentSection from '@/components/ui/PageContent'
-import { getPageContent } from '@/lib/services/content'
+import { getPageContent, getCurrentPageContent } from '@/lib/services/content'
 
 export const metadata: Metadata = {
   title: 'Bảng xếp hạng bóng đá',
@@ -33,15 +33,18 @@ async function StandingsSection({ leagueId }: { leagueId: number }) {
 }
 
 export default async function BangXepHangPage(props: PageProps<'/bang-xep-hang'>) {
-  const { league: leagueParam } = await props.searchParams ?? {}
+  const searchParams = await props.searchParams ?? {}
+  const { league: leagueParam } = searchParams
   const selectedLeagueId = typeof leagueParam === 'string'
     ? parseInt(leagueParam)
     : TRACKED_LEAGUES[0].id
 
   const selectedLeague = TRACKED_LEAGUES.find((l) => l.id === selectedLeagueId) ?? TRACKED_LEAGUES[0]
   
-  // Lấy nội dung trang (nếu có)
-  const pageContent = await getPageContent('standings')
+  // Lấy nội dung trang - ưu tiên content có query params, fallback về trang chính
+  const pageContentWithParams = await getCurrentPageContent('/bang-xep-hang', searchParams)
+  const pageContentDefault = pageContentWithParams ? null : await getPageContent('standings')
+  const pageContent = pageContentWithParams || pageContentDefault
 
   return (
     <div className="space-y-3">

@@ -15,7 +15,8 @@ export interface PageContent {
 
 /**
  * Lấy nội dung cho bất kỳ trang nào dựa trên page_path
- * @param pagePath - Đường dẫn trang (VD: '/giai-dau/39', '/ty-le-keo', '/lich-thi-dau')
+ * Hỗ trợ cả path có query params: /bang-xep-hang?league=135
+ * @param pagePath - Đường dẫn trang (VD: '/giai-dau/39', '/ty-le-keo', '/bang-xep-hang?league=135')
  */
 export async function getPageContentByPath(pagePath: string): Promise<PageContent | null> {
   const { data, error } = await supabase
@@ -34,6 +35,35 @@ export async function getPageContentByPath(pagePath: string): Promise<PageConten
   }
 
   return data
+}
+
+/**
+ * Lấy nội dung cho trang hiện tại dựa trên pathname và searchParams
+ * @param pathname - Pathname từ Next.js (VD: '/bang-xep-hang')
+ * @param searchParams - Search params từ Next.js (VD: { league: '135' })
+ */
+export async function getCurrentPageContent(
+  pathname: string,
+  searchParams?: Record<string, string | string[] | undefined>
+): Promise<PageContent | null> {
+  // Build full path with query params
+  let fullPath = pathname
+  
+  if (searchParams && Object.keys(searchParams).length > 0) {
+    const params = new URLSearchParams()
+    Object.entries(searchParams).forEach(([key, value]) => {
+      if (value) {
+        const stringValue = Array.isArray(value) ? value[0] : value
+        params.append(key, stringValue)
+      }
+    })
+    const queryString = params.toString()
+    if (queryString) {
+      fullPath = `${pathname}?${queryString}`
+    }
+  }
+  
+  return getPageContentByPath(fullPath)
 }
 
 /**
