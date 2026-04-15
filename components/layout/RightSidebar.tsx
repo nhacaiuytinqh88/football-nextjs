@@ -57,6 +57,16 @@ async function FeaturedOdds() {
 
     return (
       <>
+        {/* Header bảng */}
+        <div className="bg-gray-800 border-b border-gray-600">
+          <div className="flex items-center text-white text-[10px] font-semibold">
+            <div className="flex-1 px-3 py-2">Trận đấu</div>
+            <div className="w-14 border-l border-gray-700 text-center py-2">Chấp</div>
+            <div className="w-12 border-l border-gray-700 text-center py-2">T/X</div>
+            <div className="w-10 border-l border-gray-700 text-center py-2">1×2</div>
+          </div>
+        </div>
+        
         <ul className="divide-y divide-gray-50">
           {featured.map((o, idx) => {
             const fixture = fixtures[idx]

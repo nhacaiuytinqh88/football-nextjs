@@ -309,7 +309,6 @@ async function OddsSection({ fixtureId }: { fixtureId: number }) {
 
   const winner = getMatchWinner(odds)
   const ou25 = getOverUnder(odds, '2.5')
-  const ou15 = getOverUnder(odds, '1.5')
   const ah = getAsianHandicap(odds)
 
   if (!winner && !ou25 && ah.length === 0) return null
@@ -330,81 +329,90 @@ async function OddsSection({ fixtureId }: { fixtureId: number }) {
         <h2 className="text-sm font-semibold text-white">Tỷ lệ kèo</h2>
         <span className="ml-auto text-xs text-green-200">Bet365</span>
       </div>
-      <div className="p-4 space-y-4">
-        {/* Kèo 1x2 */}
-        {winner && (
-          <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Kèo 1×2 (Châu Âu)</p>
-            <div className="grid grid-cols-3 gap-2">
-              {[
-                { label: '1 (Nhà)', odd: winner.home },
-                { label: 'X (Hòa)', odd: winner.draw },
-                { label: '2 (Khách)', odd: winner.away },
-              ].map(({ label, odd }) => (
-                <div key={label} className="rounded-xl bg-gray-50 px-3 py-2.5 text-center">
-                  <p className="text-[10px] text-gray-400 mb-1">{label}</p>
-                  <p className={`text-base tabular-nums ${colorOdd(odd)}`}>{odd}</p>
-                </div>
-              ))}
+
+      {/* Bảng kèo - format giống trang tỷ lệ kèo */}
+      <div className="overflow-x-auto">
+        <div className="min-w-[320px]">
+          {/* Header */}
+          <div className="bg-gray-800 border-b border-gray-600">
+            <div className="flex items-center text-white text-[10px] font-semibold">
+              <div className="flex-1 px-4 py-2">Loại kèo</div>
+              <div className="w-16 border-l border-gray-700 text-center py-2">Chấp</div>
+              <div className="w-14 border-l border-gray-700 text-center py-2">T/X</div>
+              <div className="w-12 border-l border-gray-700 text-center py-2">1×2</div>
             </div>
           </div>
-        )}
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* Châu Á */}
-          {ah.length > 0 && (
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Kèo Châu Á (Handicap)</p>
-              <div className="space-y-2">
-                {ah.slice(0, 2).map((row, i) => (
-                  <div key={i} className="bg-gray-50 rounded-lg p-3">
-                    <p className="text-[10px] text-gray-400 mb-2 text-center">
-                      Chấp: {row.home.replace('Home ', '')}
-                    </p>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="text-center">
-                        <p className="text-[9px] text-gray-400 mb-1">Nhà</p>
-                        <p className={`text-sm tabular-nums ${colorOdd(row.homeOdd)}`}>{row.homeOdd}</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-[9px] text-gray-400 mb-1">Khách</p>
-                        <p className={`text-sm tabular-nums ${colorOdd(row.awayOdd)}`}>{row.awayOdd}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+          {/* Kèo cả trận */}
+          <div className="flex items-center border-b border-gray-100">
+            <div className="flex-1 px-4 py-2">
+              <p className="text-xs font-semibold text-gray-700">Cả trận</p>
             </div>
-          )}
+            
+            {/* Kèo châu Á */}
+            <div className="w-16 border-l border-gray-200">
+              {ah[0] ? (
+                <div className="flex flex-col items-center justify-center gap-1 py-1.5">
+                  <div className="flex items-center gap-1">
+                    <span className="text-[11px] text-gray-500 font-medium min-w-[22px]">
+                      {ah[0].home.replace('Home ', '')}
+                    </span>
+                    <span className={`tabular-nums text-[11px] ${colorOdd(ah[0].homeOdd)}`}>
+                      {ah[0].homeOdd}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-end w-full pr-1">
+                    <span className={`tabular-nums text-[11px] ${colorOdd(ah[0].awayOdd)}`}>
+                      {ah[0].awayOdd}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="py-1.5 text-center text-[11px] text-gray-300">-</div>
+              )}
+            </div>
 
-          {/* Tài xỉu */}
-          {(ou25 || ou15) && (
-            <div>
-              <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Kèo Tài/Xỉu (Over/Under)</p>
-              <div className="space-y-2">
-                {[
-                  { line: '2.5', data: ou25 },
-                  { line: '1.5', data: ou15 },
-                ].filter(x => x.data).map(({ line, data }) => (
-                  <div key={line} className="bg-gray-50 rounded-lg p-3">
-                    <p className="text-[10px] text-gray-400 mb-2 text-center">
-                      Tổng bàn thắng: {line}
-                    </p>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="text-center">
-                        <p className="text-[9px] text-orange-500 mb-1">Tài (Over)</p>
-                        <p className={`text-sm tabular-nums ${colorOdd(data!.over)}`}>{data!.over}</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-[9px] text-blue-500 mb-1">Xỉu (Under)</p>
-                        <p className={`text-sm tabular-nums ${colorOdd(data!.under)}`}>{data!.under}</p>
-                      </div>
-                    </div>
+            {/* Kèo tài xỉu */}
+            <div className="w-14 border-l border-gray-200">
+              {ou25 ? (
+                <div className="flex flex-col items-center justify-center gap-1 py-1.5">
+                  <div className="flex items-center gap-1">
+                    <span className="text-[11px] text-gray-500 font-medium min-w-[16px]">2.5</span>
+                    <span className={`tabular-nums text-[11px] ${colorOdd(ou25.over)}`}>
+                      {ou25.over}
+                    </span>
                   </div>
-                ))}
-              </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-[11px] text-gray-500 font-medium min-w-[16px]">U</span>
+                    <span className={`tabular-nums text-[11px] ${colorOdd(ou25.under)}`}>
+                      {ou25.under}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="py-1.5 text-center text-[11px] text-gray-300">-</div>
+              )}
             </div>
-          )}
+
+            {/* Kèo 1x2 */}
+            <div className="w-12 border-l border-gray-200">
+              {winner ? (
+                <div className="flex flex-col items-center justify-center gap-0.5 py-1.5">
+                  <span className={`tabular-nums text-[11px] ${colorOdd(winner.home)}`}>
+                    {winner.home}
+                  </span>
+                  <span className={`tabular-nums text-[11px] ${colorOdd(winner.draw)}`}>
+                    {winner.draw}
+                  </span>
+                  <span className={`tabular-nums text-[11px] ${colorOdd(winner.away)}`}>
+                    {winner.away}
+                  </span>
+                </div>
+              ) : (
+                <div className="py-1.5 text-center text-[11px] text-gray-300">-</div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
