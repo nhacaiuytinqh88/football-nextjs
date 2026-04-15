@@ -8,9 +8,6 @@ export default function DeleteArticleButton({ id, title }: { id: string; title: 
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
-  // Debug log
-  console.log('DeleteArticleButton rendered for:', id, title)
-
   async function handleDelete() {
     if (!confirm(`⚠️ Xóa bài viết "${title}"?\n\nHành động này không thể hoàn tác!`)) return
 
