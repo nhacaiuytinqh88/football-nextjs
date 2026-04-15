@@ -21,6 +21,9 @@ async function ArticleList({ leagueId }: { leagueId?: number }) {
     .from('articles')
     .select('id, title, slug, excerpt, cover_image, author, published_at, match_id, league_id')
     .eq('status', 'published')
+    // Chỉ lấy bài viết nhận định (slug bắt đầu với "nhan-dinh-")
+    // Loại bỏ các bài content page: gioi-thieu-*, huong-dan-*, lich-su-*
+    .like('slug', 'nhan-dinh-%')
     .order('published_at', { ascending: false })
     .limit(20)
 

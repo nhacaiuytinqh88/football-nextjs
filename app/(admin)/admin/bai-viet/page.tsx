@@ -28,17 +28,17 @@ export default async function BaiVietPage() {
         </Link>
       </div>
 
-      <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-gray-100 bg-white shadow-sm">
         {/* Desktop table */}
-        <div className="hidden md:block overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm min-w-[800px]">
             <thead>
               <tr className="border-b border-gray-100 text-xs text-gray-400 text-left">
                 <th className="px-4 py-3 font-medium">Tiêu đề</th>
-                <th className="px-4 py-3 font-medium w-24">Trạng thái</th>
+                <th className="px-4 py-3 font-medium w-28">Trạng thái</th>
                 <th className="px-4 py-3 font-medium w-24">Match ID</th>
-                <th className="px-4 py-3 font-medium w-28">Ngày tạo</th>
-                <th className="px-4 py-3 font-medium w-32">Thao tác</th>
+                <th className="px-4 py-3 font-medium w-32">Ngày tạo</th>
+                <th className="px-4 py-3 font-medium w-40">Thao tác</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
@@ -79,6 +79,7 @@ export default async function BaiVietPage() {
                       >
                         <Pencil size={16} />
                       </Link>
+                      <span className="text-xs text-red-500">TEST</span>
                       <DeleteArticleButton id={a.id} title={a.title} />
                     </div>
                   </td>
@@ -89,7 +90,7 @@ export default async function BaiVietPage() {
         </div>
 
         {/* Mobile list */}
-        <ul className="divide-y divide-gray-50 md:hidden">
+        <ul className="divide-y divide-gray-50 hidden">
           {(!articles || articles.length === 0) && (
             <li className="px-4 py-10 text-center text-sm text-gray-400">Chưa có bài viết nào</li>
           )}
@@ -115,6 +116,7 @@ export default async function BaiVietPage() {
               >
                 <Pencil size={16} />
               </Link>
+              <span className="text-xs text-red-500">TEST</span>
               <DeleteArticleButton id={a.id} title={a.title} />
             </li>
           ))}
