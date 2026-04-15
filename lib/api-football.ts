@@ -111,3 +111,134 @@ export async function fetchFixtureById(fixtureId: number): Promise<Fixture | nul
   const data = await apiFetch<Fixture>('fixtures', { id: fixtureId })
   return data.response[0] ?? null
 }
+
+// --- Team types ---
+export interface Team {
+  team: {
+    id: number
+    name: string
+    code: string | null
+    country: string
+    founded: number | null
+    national: boolean
+    logo: string
+  }
+  venue: {
+    id: number | null
+    name: string | null
+    address: string | null
+    city: string | null
+    capacity: number | null
+    surface: string | null
+    image: string | null
+  }
+}
+
+export interface TeamStatistics {
+  league: { id: number; name: string; country: string; logo: string; season: number }
+  team: { id: number; name: string; logo: string }
+  form: string
+  fixtures: {
+    played: { home: number; away: number; total: number }
+    wins: { home: number; away: number; total: number }
+    draws: { home: number; away: number; total: number }
+    loses: { home: number; away: number; total: number }
+  }
+  goals: {
+    for: { total: { home: number; away: number; total: number }; average: { home: string; away: string; total: string } }
+    against: { total: { home: number; away: number; total: number }; average: { home: string; away: string; total: string } }
+  }
+  biggest: {
+    wins: { home: string | null; away: string | null }
+    loses: { home: string | null; away: string | null }
+    goals: { for: { home: number; away: number }; against: { home: number; away: number } }
+  }
+  clean_sheet: { home: number; away: number; total: number }
+  failed_to_score: { home: number; away: number; total: number }
+}
+
+// --- League types ---
+export interface League {
+  league: {
+    id: number
+    name: string
+    type: string
+    logo: string
+  }
+  country: {
+    name: string
+    code: string | null
+    flag: string | null
+  }
+  seasons: Array<{
+    year: number
+    start: string
+    end: string
+    current: boolean
+    coverage: { standings: boolean; fixtures: { events: boolean; lineups: boolean } }
+  }>
+}
+
+// --- Fetch functions ---
+
+/** Lấy thông tin đội bóng */
+export async function fetchTeamById(teamId: number): Promise<Team | null> {
+  const data = await apiFetch<Team>('teams', { id: teamId })
+  return data.response[0] ?? null
+}
+
+/** Lấy thống kê đội bóng theo giải đấu và mùa */
+export async function fetchTeamStatistics(
+  teamId: number,
+  leagueId: number,
+  season: number
+): Promise<TeamStatistics | null> {
+  const data = await apiFetch<TeamStatistics>('teams/statistics', {
+    team: teamId,
+    league: leagueId,
+    season,
+  })
+  return data.response[0] ?? null
+}
+
+/** Lấy lịch thi đấu của đội bóng (10 trận gần nhất + 5 trận tới) */
+export async function fetchTeamFixtures(
+  teamId: number,
+  season: number,
+  last = 5,
+  next = 5
+): Promise<{ last: Fixture[]; next: Fixture[] }> {
+  const [lastData, nextData] = await Promise.all([
+    apiFetch<Fixture>('fixtures', { team: teamId, season, last, timezone: 'Asia/Ho_Chi_Minh' }),
+    apiFetch<Fixture>('fixtures', { team: teamId, season, next, timezone: 'Asia/Ho_Chi_Minh' }),
+  ])
+  return { last: lastData.response, next: nextData.response }
+}
+
+/** Lấy thông tin giải đấu */
+export async function fetchLeagueById(leagueId: number): Promise<League | null> {
+  const data = await apiFetch<League>('leagues', { id: leagueId })
+  return data.response[0] ?? null
+}
+
+/** Lấy lịch thi đấu của giải đấu theo vòng */
+export async function fetchLeagueFixtures(
+  leagueId: number,
+  season: number,
+  round?: string
+): Promise<Fixture[]> {
+  const params: Record<string, string | number> = {
+    league: leagueId,
+    season,
+    timezone: 'Asia/Ho_Chi_Minh',
+  }
+  if (round) params.round = round
+  const data = await apiFetch<Fixture>('fixtures', params)
+  return data.response
+}
+
+/** Lấy danh sách các vòng đấu của giải */
+export async function fetchLeagueRounds(leagueId: number, season: number): Promise<string[]> {
+  const data = await apiFetch<string>('fixtures/rounds', { league: leagueId, season })
+  return data.response
+}
