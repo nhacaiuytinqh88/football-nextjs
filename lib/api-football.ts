@@ -299,3 +299,55 @@ export async function fetchTeamLeagues(
   )
   return data.response.map(r => r.league)
 }
+
+// --- Odds types ---
+export interface OddsValue {
+  value: string  // 'Home' | 'Draw' | 'Away' | 'Over 2.5' | 'Under 2.5' | 'Home -1' ...
+  odd: string    // '1.85'
+}
+
+export interface OddsBet {
+  id: number
+  name: string   // 'Match Winner' | 'Goals Over/Under' | 'Asian Handicap'
+  values: OddsValue[]
+}
+
+export interface OddsBookmaker {
+  id: number
+  name: string
+  bets: OddsBet[]
+}
+
+export interface FixtureOdds {
+  fixture: { id: number; timezone: string; date: string; timestamp: number }
+  league: { id: number; name: string; country: string; logo: string; flag: string | null; season: number }
+  update: string
+  bookmakers: OddsBookmaker[]
+}
+
+/** Lấy tỷ lệ kèo theo giải đấu (bookmaker 8 = Bet365) */
+export async function fetchOddsByLeague(
+  leagueId: number,
+  season: number,
+  page = 1
+): Promise<{ odds: FixtureOdds[]; totalPages: number }> {
+  const data = await apiFetch<FixtureOdds>('odds', {
+    league: leagueId,
+    season,
+    bookmaker: 8, // Bet365
+    page,
+  })
+  return {
+    odds: data.response,
+    totalPages: data.paging.total,
+  }
+}
+
+/** Lấy tỷ lệ kèo theo fixture ID */
+export async function fetchOddsByFixture(fixtureId: number): Promise<FixtureOdds | null> {
+  const data = await apiFetch<FixtureOdds>('odds', {
+    fixture: fixtureId,
+    bookmaker: 8,
+  })
+  return data.response[0] ?? null
+}

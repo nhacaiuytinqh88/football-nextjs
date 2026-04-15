@@ -1,78 +1,116 @@
 import Link from 'next/link'
 import { Newspaper, TrendingUp } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
+import { getOddsByLeague, getMatchWinner } from '@/lib/services/odds'
+import { formatArticleDate } from '@/lib/date'
 
-// Placeholder - sau này lấy từ Supabase
-const HOT_NEWS = [
-  {
-    id: 1,
-    title: 'Haaland lập hat-trick, Man City thắng đậm',
-    slug: 'haaland-hat-trick-man-city',
-    time: '2 giờ trước',
-  },
-  {
-    id: 2,
-    title: 'Real Madrid chia điểm trên sân nhà',
-    slug: 'real-madrid-chia-diem',
-    time: '4 giờ trước',
-  },
-  {
-    id: 3,
-    title: 'Mbappe chấn thương, PSG lo lắng',
-    slug: 'mbappe-chan-thuong-psg',
-    time: '5 giờ trước',
-  },
-  {
-    id: 4,
-    title: 'V.League: HAGL thắng kịch tính phút bù giờ',
-    slug: 'vleague-hagl-thang-kich-tinh',
-    time: '6 giờ trước',
-  },
-]
+// Tin HOT từ Supabase
+async function HotNews() {
+  const { data: articles } = await supabase
+    .from('articles')
+    .select('id, title, slug, published_at')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(5)
+
+  if (!articles || articles.length === 0) {
+    return (
+      <div className="px-4 py-4 text-xs text-gray-400 text-center">Chưa có bài viết</div>
+    )
+  }
+
+  return (
+    <>
+      <ul className="divide-y divide-gray-50">
+        {articles.map((a) => (
+          <li key={a.id}>
+            <Link href={`/nhan-dinh/${a.slug}`} className="block px-4 py-3 hover:bg-red-50 transition-colors">
+              <p className="text-sm font-medium text-gray-800 line-clamp-2 leading-snug">{a.title}</p>
+              <p className="mt-1 text-xs text-gray-400">{formatArticleDate(a.published_at)}</p>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <div className="px-4 py-2 border-t border-gray-100">
+        <Link href="/nhan-dinh" className="text-xs font-medium text-green-700 hover:underline">
+          Xem tất cả →
+        </Link>
+      </div>
+    </>
+  )
+}
+
+// Kèo nổi bật — lấy 3 trận Premier League
+async function FeaturedOdds() {
+  try {
+    const { odds } = await getOddsByLeague(39) // Premier League
+    const featured = odds.slice(0, 3)
+
+    if (featured.length === 0) {
+      return <div className="px-4 py-4 text-xs text-gray-400 text-center">Chưa có kèo</div>
+    }
+
+    return (
+      <>
+        <ul className="divide-y divide-gray-50">
+          {featured.map((o) => {
+            const winner = getMatchWinner(o)
+            if (!winner) return null
+            return (
+              <li key={o.fixture.id}>
+                <Link href={`/tran-dau/${o.fixture.id}`} className="block px-4 py-3 hover:bg-blue-50 transition-colors">
+                  <div className="grid grid-cols-3 gap-1 text-center">
+                    <div>
+                      <p className="text-[10px] text-gray-400">1</p>
+                      <p className="text-sm font-bold text-green-700">{winner.home}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-gray-400">X</p>
+                      <p className="text-sm font-semibold text-gray-700">{winner.draw}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-gray-400">2</p>
+                      <p className="text-sm font-semibold text-gray-700">{winner.away}</p>
+                    </div>
+                  </div>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+        <div className="px-4 py-2 border-t border-gray-100">
+          <Link href="/ty-le-keo" className="text-xs font-medium text-green-700 hover:underline">
+            Xem tất cả kèo →
+          </Link>
+        </div>
+      </>
+    )
+  } catch {
+    return <div className="px-4 py-4 text-xs text-gray-400 text-center">Đang cập nhật...</div>
+  }
+}
 
 export default function RightSidebar() {
   return (
     <aside className="hidden xl:flex flex-col w-[25%] min-w-[200px] max-w-[280px] shrink-0">
       <div className="sticky top-[72px] space-y-4">
         {/* Tin tức HOT */}
-        <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+        <div className="rounded-xl bg-white shadow-sm overflow-hidden">
           <div className="flex items-center gap-2 bg-red-600 px-4 py-3">
-            <Newspaper size={16} className="text-white" />
+            <Newspaper size={14} className="text-white" />
             <h2 className="text-sm font-semibold text-white">Tin HOT</h2>
           </div>
-          <ul className="divide-y divide-gray-50">
-            {HOT_NEWS.map((news) => (
-              <li key={news.id}>
-                <Link
-                  href={`/nhan-dinh/${news.slug}`}
-                  className="block px-4 py-3 hover:bg-red-50 transition-colors"
-                >
-                  <p className="text-sm font-medium text-gray-800 line-clamp-2 leading-snug">
-                    {news.title}
-                  </p>
-                  <p className="mt-1 text-xs text-gray-400">{news.time}</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="px-4 py-2 border-t border-gray-100">
-            <Link
-              href="/nhan-dinh"
-              className="text-xs font-medium text-green-700 hover:underline"
-            >
-              Xem tất cả →
-            </Link>
-          </div>
+          <HotNews />
         </div>
 
-        {/* Tỷ lệ kèo nổi bật */}
-        <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+        {/* Kèo nổi bật */}
+        <div className="rounded-xl bg-white shadow-sm overflow-hidden">
           <div className="flex items-center gap-2 bg-blue-700 px-4 py-3">
-            <TrendingUp size={16} className="text-white" />
+            <TrendingUp size={14} className="text-white" />
             <h2 className="text-sm font-semibold text-white">Kèo nổi bật</h2>
+            <span className="ml-auto text-xs text-blue-200">Bet365</span>
           </div>
-          <div className="px-4 py-3 text-sm text-gray-500 text-center">
-            Đang cập nhật...
-          </div>
+          <FeaturedOdds />
         </div>
       </div>
     </aside>

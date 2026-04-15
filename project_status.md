@@ -28,27 +28,17 @@
   - `fixtures_{date}`: Cập nhật mỗi ngày.
 
 ## 5. Task Progress
-- [x] **Phase 1-5:** ✅ HOÀN THÀNH (xem lịch sử commit)
-- [x] **Post-launch fixes:**
-  - [x] Chuẩn hóa timezone UTC+7 toàn dự án → `lib/date.ts`
-  - [x] Fix stale live cache: `FIXTURES_TODAY` TTL 5 phút, cron fixtures mỗi 5 phút
-  - [x] Trang `/giai-dau/[id]`: BXH + lịch theo vòng
-  - [x] Trang `/doi-bong/[id]`: thống kê + lịch thi đấu
-  - [x] Deploy Netlify, 3 Scheduled Functions hoạt động
-- [x] **Post-launch fixes:**
-  - [x] Chuẩn hóa timezone UTC+7 toàn dự án → `lib/date.ts`
-  - [x] Fix stale live cache: `FIXTURES_TODAY` TTL 5 phút, cron fixtures mỗi 5 phút
-  - [x] Trang `/giai-dau/[id]`: BXH + lịch theo vòng
-  - [x] Trang `/doi-bong/[id]`: thống kê + lịch thi đấu
-  - [x] Deploy Netlify, 3 Scheduled Functions hoạt động
-  - [x] Redesign BXH: `StandingsTable` component dùng chung, tô màu zone, form dots
-  - [x] Thay emoji bằng logo image từ API-Football
-  - [x] Fix season: EU=2025, V.League=2026, V.League ID 197→340
-- [x] **Đang thực hiện:**
-  - [x] Trang đội bóng: lấy giải đấu thực tế của đội từ API (không hardcode TRACKED_LEAGUES), tab giải có logo, thống kê đầy đủ (form, W/D/L%, bàn thắng/thua, sân nhà vs khách, clean sheet, kết quả đáng nhớ)
-  - [x] Trang chi tiết trận: thêm Events (bàn thắng ⚽, thẻ phạt, VAR), Statistics (bar chart 2 đội), Lineups (đội hình + dự bị + HLV)
-  - [x] `fetchFixtureDetails`, `fetchTeamLeagues` — API functions mới
-  - [x] `getFixtureDetails`, `getTeamLeagues` — service functions mới với Redis cache
+- [x] **Phase 1-5:** ✅ HOÀN THÀNH
+- [x] **Post-launch improvements:**
+  - [x] Timezone UTC+7, fix stale cache, season 2025/2026, V.League ID 340
+  - [x] Trang `/giai-dau/[id]`: BXH + lịch vòng + tab Nhận định theo giải
+  - [x] Trang `/doi-bong/[id]`: giải đấu thực tế, thống kê đầy đủ, lịch thi đấu
+  - [x] Trang `/tran-dau/[id]`: Events, Statistics, Lineups
+  - [x] Redesign BXH: StandingsTable, form dots cột riêng desktop
+  - [x] `ArticleCard` component dùng chung, filter bài viết theo giải
+  - [x] Fix team statistics API (response là object không phải array)
+- [ ] **Đang thực hiện:**
+  - [ ] Trang `/ty-le-keo`: tỷ lệ kèo 1x2, châu Á, tài xỉu theo giải đấu
 
 ## 6. Installed Dependencies
 ```json

@@ -2,8 +2,9 @@ import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, Clock, Users } from 'lucide-react'
+import { ArrowLeft, Clock, Users, TrendingUp } from 'lucide-react'
 import { getFixtureDetails } from '@/lib/services/fixtures'
+import { getOddsByFixture, getMatchWinner, getOverUnder, getAsianHandicap } from '@/lib/services/odds'
 import { supabase } from '@/lib/supabase'
 import MatchStatusBadge from '@/components/ui/MatchStatusBadge'
 import { fixtureJsonLd } from '@/lib/json-ld'
@@ -300,6 +301,104 @@ function LineupsSection({ fixture }: { fixture: FixtureDetail }) {
   )
 }
 
+// --- Tỷ lệ kèo ---
+async function OddsSection({ fixtureId }: { fixtureId: number }) {
+  const odds = await getOddsByFixture(fixtureId)
+  if (!odds) return null
+
+  const winner = getMatchWinner(odds)
+  const ou = getOverUnder(odds, '2.5')
+  const ah = getAsianHandicap(odds)
+
+  if (!winner && !ou && ah.length === 0) return null
+
+  const colorOdd = (odd: string) => {
+    const v = parseFloat(odd)
+    if (isNaN(v) || odd === '-') return 'text-gray-700'
+    if (v < 1.5) return 'text-green-700 font-bold'
+    if (v < 2.0) return 'text-green-600'
+    if (v > 3.5) return 'text-red-500'
+    return 'text-gray-800'
+  }
+
+  return (
+    <div className="rounded-xl bg-white shadow-sm overflow-hidden">
+      <div className="flex items-center gap-2 bg-green-700 px-4 py-3">
+        <TrendingUp size={14} className="text-white" />
+        <h2 className="text-sm font-semibold text-white">Tỷ lệ kèo</h2>
+        <span className="ml-auto text-xs text-green-200">Bet365</span>
+      </div>
+      <div className="p-4 space-y-4">
+        {/* Kèo 1x2 */}
+        {winner && (
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Kèo 1X2</p>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: '1 (Nhà)', odd: winner.home },
+                { label: 'X (Hòa)', odd: winner.draw },
+                { label: '2 (Khách)', odd: winner.away },
+              ].map(({ label, odd }) => (
+                <div key={label} className="rounded-xl bg-gray-50 px-3 py-2.5 text-center">
+                  <p className="text-[10px] text-gray-400 mb-1">{label}</p>
+                  <p className={`text-base tabular-nums ${colorOdd(odd)}`}>{odd}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-4">
+          {/* Châu Á */}
+          {ah.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Kèo châu Á</p>
+              <div className="space-y-1.5">
+                {ah.slice(0, 2).map((row, i) => (
+                  <div key={i} className="grid grid-cols-2 gap-1.5">
+                    <div className="rounded-lg bg-gray-50 px-2 py-2 text-center">
+                      <p className="text-[9px] text-gray-400 truncate">{row.home.replace('Home ', '')}</p>
+                      <p className={`text-sm tabular-nums ${colorOdd(row.homeOdd)}`}>{row.homeOdd}</p>
+                    </div>
+                    <div className="rounded-lg bg-gray-50 px-2 py-2 text-center">
+                      <p className="text-[9px] text-gray-400 truncate">{row.away.replace('Away ', '')}</p>
+                      <p className={`text-sm tabular-nums ${colorOdd(row.awayOdd)}`}>{row.awayOdd}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Tài xỉu */}
+          {ou && (
+            <div>
+              <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Tài/Xỉu</p>
+              <div className="space-y-1.5">
+                {[
+                  { line: '2.5', data: ou },
+                  { line: '1.5', data: getOverUnder(odds, '1.5') },
+                ].filter(x => x.data).map(({ line, data }) => (
+                  <div key={line} className="grid grid-cols-2 gap-1.5">
+                    <div className="rounded-lg bg-orange-50 px-2 py-2 text-center">
+                      <p className="text-[9px] text-orange-500">Tài {line}</p>
+                      <p className={`text-sm tabular-nums ${colorOdd(data!.over)}`}>{data!.over}</p>
+                    </div>
+                    <div className="rounded-lg bg-blue-50 px-2 py-2 text-center">
+                      <p className="text-[9px] text-blue-500">Xỉu {line}</p>
+                      <p className={`text-sm tabular-nums ${colorOdd(data!.under)}`}>{data!.under}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // --- Bài viết nhận định ---
 async function MatchArticle({ fixtureId }: { fixtureId: number }) {
   const { data: article } = await supabase
@@ -350,6 +449,12 @@ async function MatchContent({ fixtureId }: { fixtureId: number }) {
   return (
     <div className="space-y-4">
       <Scoreboard fixture={fixture} />
+      {/* Kèo — chỉ hiện khi trận chưa bắt đầu hoặc đang diễn ra */}
+      {!hasFinished && (
+        <Suspense fallback={null}>
+          <OddsSection fixtureId={fixture.fixture.id} />
+        </Suspense>
+      )}
       {hasStarted && <EventsSection fixture={fixture} />}
       {hasFinished && <StatisticsSection fixture={fixture} />}
       {hasFinished && <LineupsSection fixture={fixture} />}

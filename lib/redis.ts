@@ -21,6 +21,9 @@ export const CACHE_KEYS = {
   TEAM_LEAGUES: (teamId: number, season: number) =>
     `team_leagues_${teamId}_${season}`,
   FIXTURE_DETAIL_FULL: (fixtureId: number) => `fixture_full_${fixtureId}`,
+  ODDS_LEAGUE: (leagueId: number, season: number, page: number) =>
+    `odds_league_${leagueId}_${season}_p${page}`,
+  ODDS_FIXTURE: (fixtureId: number) => `odds_fixture_${fixtureId}`,
   LEAGUE: (leagueId: number) => `league_${leagueId}`,
   LEAGUE_FIXTURES: (leagueId: number, season: number, round: string) =>
     `league_fixtures_${leagueId}_${season}_${round}`,
@@ -40,6 +43,7 @@ export const CACHE_TTL = {
   TEAM_FIXTURES: 3600, // 1 giờ - lịch đội
   TEAM_LEAGUES: 86400, // 1 ngày - giải đấu của đội
   FIXTURE_DETAIL_FULL: 300, // 5 phút - chi tiết đầy đủ trận (events/lineups/stats)
+  ODDS: 1800,              // 30 phút - tỷ lệ kèo (cập nhật thường xuyên trước trận)
   LEAGUE: 86400 * 7,   // 7 ngày - thông tin giải (ít thay đổi)
   LEAGUE_FIXTURES: 300,// 5 phút - lịch giải theo vòng
   LEAGUE_ROUNDS: 86400,// 1 ngày - danh sách vòng đấu
