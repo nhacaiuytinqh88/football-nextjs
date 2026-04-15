@@ -11,6 +11,8 @@ async function HotNews() {
     .from('articles')
     .select('id, title, slug, published_at')
     .eq('status', 'published')
+    // Chỉ lấy bài viết nhận định, không lấy content page
+    .like('slug', 'nhan-dinh-%')
     .order('published_at', { ascending: false })
     .limit(5)
 

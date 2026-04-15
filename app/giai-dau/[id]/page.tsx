@@ -53,6 +53,8 @@ async function ArticlesSection({ leagueId }: { leagueId: number }) {
     .select('id, title, slug, excerpt, cover_image, author, published_at, match_id, league_id')
     .eq('status', 'published')
     .eq('league_id', leagueId)
+    // Chỉ lấy bài nhận định, không lấy content page
+    .like('slug', 'nhan-dinh-%')
     .order('published_at', { ascending: false })
     .limit(10)
 
