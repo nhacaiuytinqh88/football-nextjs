@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
   if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await request.json()
-  const { title, slug, excerpt, content, cover_image, match_id, league_id, author, status, published_at, content_type } = body
+  const { title, slug, excerpt, content, cover_image, match_id, league_id, author, status, published_at, content_type, page_type } = body
 
   if (!title || !slug || !content) {
     return Response.json({ error: 'Thiếu trường bắt buộc: title, slug, content' }, { status: 400 })
@@ -34,7 +34,11 @@ export async function POST(request: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from('articles')
-    .insert({ title, slug, excerpt, content, cover_image, match_id, league_id, author, status, published_at, content_type: content_type || 'article' })
+    .insert({ 
+      title, slug, excerpt, content, cover_image, match_id, league_id, author, status, published_at, 
+      content_type: content_type || 'article',
+      page_type: content_type === 'page_content' ? page_type : null
+    })
     .select('id')
     .single()
 

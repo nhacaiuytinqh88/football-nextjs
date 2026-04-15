@@ -16,6 +16,7 @@ interface ArticleFormData {
   author: string
   status: 'draft' | 'published'
   content_type: 'article' | 'page_content'
+  page_type: 'league_intro' | 'team_intro' | 'odds_guide' | 'standings_guide' | 'fixtures_guide' | 'general' | ''
 }
 
 interface Props {
@@ -51,6 +52,7 @@ export default function ArticleForm({ initialData }: Props) {
     author: initialData?.author ?? 'Admin',
     status: initialData?.status ?? 'draft',
     content_type: (initialData as any)?.content_type ?? 'article',
+    page_type: (initialData as any)?.page_type ?? '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -153,6 +155,7 @@ export default function ArticleForm({ initialData }: Props) {
       league_id: form.league_id ? parseInt(form.league_id) : null,
       published_at: status === 'published' ? new Date().toISOString() : null,
       content_type: form.content_type,
+      page_type: form.content_type === 'page_content' ? form.page_type : null,
     }
 
     const url = isEdit ? `/api/admin/articles/${initialData!.id}` : '/api/admin/articles'
@@ -181,30 +184,105 @@ export default function ArticleForm({ initialData }: Props) {
       <div className="rounded-lg bg-blue-50 border border-blue-200 p-3">
         <p className="text-xs text-blue-800 font-medium mb-2">💡 Loại nội dung:</p>
         <ul className="text-xs text-blue-700 space-y-1 list-disc list-inside">
-          <li><strong>Bài viết (Article):</strong> Nhận định trận đấu, tin tức - hiển thị ở trang /nhan-dinh</li>
-          <li><strong>Nội dung trang (Page Content):</strong> Giới thiệu giải đấu/đội bóng, hướng dẫn - chỉ hiển thị ở trang tương ứng</li>
+          <li><strong>Bài viết (Article):</strong> Nhận định trận đấu, tin tức - hiển thị ở /nhan-dinh</li>
+          <li><strong>Nội dung trang (Page Content):</strong> Giới thiệu, hướng dẫn - chỉ hiển thị ở trang được chỉ định</li>
         </ul>
       </div>
 
       {/* Loại nội dung */}
-      <div>
-        <label className="mb-1.5 block text-sm font-medium text-gray-700">
-          Loại nội dung <span className="text-red-500">*</span>
-        </label>
-        <select
-          value={form.content_type}
-          onChange={(e) => setForm((f) => ({ ...f, content_type: e.target.value as 'article' | 'page_content' }))}
-          className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
-        >
-          <option value="article">Bài viết (Article)</option>
-          <option value="page_content">Nội dung trang (Page Content)</option>
-        </select>
-        <p className="mt-1 text-xs text-gray-400">
-          {form.content_type === 'article' 
-            ? 'Hiển thị ở trang /nhan-dinh và sidebar' 
-            : 'Chỉ hiển thị ở trang được chỉ định (giải đấu, đội bóng, tỷ lệ kèo)'}
-        </p>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-gray-700">
+            Loại nội dung <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={form.content_type}
+            onChange={(e) => {
+              const newType = e.target.value as 'article' | 'page_content'
+              setForm((f) => ({ 
+                ...f, 
+                content_type: newType,
+                page_type: newType === 'article' ? '' : f.page_type
+              }))
+            }}
+            className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
+          >
+            <option value="article">Bài viết</option>
+            <option value="page_content">Nội dung trang</option>
+          </select>
+        </div>
+
+        {form.content_type === 'page_content' && (
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              Loại trang <span className="text-red-500">*</span>
+            </label>
+            <select
+              value={form.page_type}
+              onChange={(e) => setForm((f) => ({ ...f, page_type: e.target.value as any }))}
+              className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
+            >
+              <option value="">-- Chọn loại trang --</option>
+              <option value="league_intro">Giới thiệu giải đấu</option>
+              <option value="team_intro">Giới thiệu đội bóng</option>
+              <option value="odds_guide">Hướng dẫn tỷ lệ kèo</option>
+              <option value="standings_guide">Hướng dẫn bảng xếp hạng</option>
+              <option value="fixtures_guide">Hướng dẫn lịch thi đấu</option>
+              <option value="general">Khác</option>
+            </select>
+          </div>
+        )}
       </div>
+
+      {/* Hướng dẫn theo page_type */}
+      {form.content_type === 'page_content' && form.page_type && (
+        <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-3">
+          <p className="text-xs text-yellow-800 font-medium mb-1">📍 Cấu hình cho {
+            form.page_type === 'league_intro' ? 'Giới thiệu giải đấu' :
+            form.page_type === 'team_intro' ? 'Giới thiệu đội bóng' :
+            form.page_type === 'odds_guide' ? 'Hướng dẫn tỷ lệ kèo' :
+            form.page_type === 'standings_guide' ? 'Hướng dẫn bảng xếp hạng' :
+            form.page_type === 'fixtures_guide' ? 'Hướng dẫn lịch thi đấu' : 'Nội dung khác'
+          }:</p>
+          <ul className="text-xs text-yellow-700 space-y-0.5 list-disc list-inside">
+            {form.page_type === 'league_intro' && (
+              <>
+                <li>League ID: Nhập ID giải đấu (VD: 39 cho Premier League)</li>
+                <li>Match ID: Để trống</li>
+                <li>Hiển thị tại: /giai-dau/[league_id]</li>
+              </>
+            )}
+            {form.page_type === 'team_intro' && (
+              <>
+                <li>Match ID: Nhập Team ID (VD: 33 cho Man Utd)</li>
+                <li>League ID: Nhập -1</li>
+                <li>Hiển thị tại: /doi-bong/[team_id]</li>
+              </>
+            )}
+            {form.page_type === 'odds_guide' && (
+              <>
+                <li>League ID: Nhập 0</li>
+                <li>Match ID: Để trống</li>
+                <li>Hiển thị tại: /ty-le-keo</li>
+              </>
+            )}
+            {form.page_type === 'standings_guide' && (
+              <>
+                <li>League ID: Nhập 0</li>
+                <li>Match ID: Để trống</li>
+                <li>Hiển thị tại: /bang-xep-hang</li>
+              </>
+            )}
+            {form.page_type === 'fixtures_guide' && (
+              <>
+                <li>League ID: Nhập 0</li>
+                <li>Match ID: Để trống</li>
+                <li>Hiển thị tại: /lich-thi-dau</li>
+              </>
+            )}
+          </ul>
+        </div>
+      )}
 
       {/* Tiêu đề */}
       <div>
@@ -241,20 +319,15 @@ export default function ArticleForm({ initialData }: Props) {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="mb-1.5 block text-sm font-medium text-gray-700">
-            {form.content_type === 'page_content' && 'Team ID hoặc '}Match ID
+            {form.page_type === 'team_intro' ? 'Team ID' : 'Match ID'}
           </label>
           <input
             type="number"
             value={form.match_id}
             onChange={(e) => setForm((f) => ({ ...f, match_id: e.target.value }))}
-            placeholder={form.content_type === 'page_content' ? '33 (team) hoặc 1035066 (match)' : '1035066'}
+            placeholder={form.page_type === 'team_intro' ? '33' : '1035066'}
             className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
           />
-          <p className="mt-1 text-xs text-gray-400">
-            {form.content_type === 'article' 
-              ? 'Gắn bài với trận đấu cụ thể' 
-              : 'Team ID cho giới thiệu đội, Match ID cho nhận định'}
-          </p>
         </div>
         <div>
           <label className="mb-1.5 block text-sm font-medium text-gray-700">
@@ -264,14 +337,13 @@ export default function ArticleForm({ initialData }: Props) {
             type="number"
             value={form.league_id}
             onChange={(e) => setForm((f) => ({ ...f, league_id: e.target.value }))}
-            placeholder={form.content_type === 'page_content' ? '39 (giải) hoặc 0 (hướng dẫn)' : '39'}
+            placeholder={
+              form.page_type === 'league_intro' ? '39' :
+              form.page_type === 'team_intro' ? '-1' :
+              form.page_type ? '0' : '39'
+            }
             className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
           />
-          <p className="mt-1 text-xs text-gray-400">
-            {form.content_type === 'article'
-              ? 'ID giải đấu'
-              : 'ID giải cho giới thiệu, 0 cho hướng dẫn, -1 cho đội bóng'}
-          </p>
         </div>
       </div>
 

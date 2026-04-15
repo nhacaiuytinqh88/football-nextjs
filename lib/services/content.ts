@@ -15,15 +15,15 @@ export interface PageContent {
 
 /**
  * Lấy nội dung cho trang giải đấu
- * Quy ước: content_type = 'page_content', league_id có giá trị, match_id = NULL
+ * Quy ước: content_type = 'page_content', page_type = 'league_intro', league_id có giá trị
  */
 export async function getLeagueContent(leagueId: number): Promise<PageContent | null> {
   const { data, error } = await supabase
     .from('articles')
     .select('*')
     .eq('content_type', 'page_content')
+    .eq('page_type', 'league_intro')
     .eq('league_id', leagueId)
-    .is('match_id', null)
     .eq('status', 'published')
     .order('created_at', { ascending: false })
     .limit(1)
@@ -39,15 +39,15 @@ export async function getLeagueContent(leagueId: number): Promise<PageContent | 
 
 /**
  * Lấy nội dung cho trang đội bóng
- * Quy ước: content_type = 'page_content', match_id = team_id, league_id = -1
+ * Quy ước: content_type = 'page_content', page_type = 'team_intro', match_id = team_id
  */
 export async function getTeamContent(teamId: number): Promise<PageContent | null> {
   const { data, error } = await supabase
     .from('articles')
     .select('*')
     .eq('content_type', 'page_content')
+    .eq('page_type', 'team_intro')
     .eq('match_id', teamId)
-    .eq('league_id', -1)
     .eq('status', 'published')
     .order('created_at', { ascending: false })
     .limit(1)
@@ -63,15 +63,16 @@ export async function getTeamContent(teamId: number): Promise<PageContent | null
 
 /**
  * Lấy nội dung cho các trang tĩnh (odds guide, standings guide, etc.)
- * Quy ước: content_type = 'page_content', league_id = 0, match_id = NULL
+ * Quy ước: content_type = 'page_content', page_type = loại trang
  */
-export async function getPageContent(pageType: 'odds' | 'standings' | 'fixtures'): Promise<PageContent | null> {
+export async function getPageContent(
+  pageType: 'odds_guide' | 'standings_guide' | 'fixtures_guide'
+): Promise<PageContent | null> {
   const { data, error } = await supabase
     .from('articles')
     .select('*')
     .eq('content_type', 'page_content')
-    .eq('league_id', 0)
-    .is('match_id', null)
+    .eq('page_type', pageType)
     .eq('status', 'published')
     .order('created_at', { ascending: false })
     .limit(1)

@@ -26,7 +26,7 @@ export async function PUT(request: NextRequest, ctx: RouteContext<'/api/admin/ar
 
   const { id } = await ctx.params
   const body = await request.json()
-  const { title, slug, excerpt, content, cover_image, match_id, league_id, author, status, published_at, content_type } = body
+  const { title, slug, excerpt, content, cover_image, match_id, league_id, author, status, published_at, content_type, page_type } = body
 
   if (!title || !slug || !content) {
     return Response.json({ error: 'Thiếu trường bắt buộc' }, { status: 400 })
@@ -34,7 +34,11 @@ export async function PUT(request: NextRequest, ctx: RouteContext<'/api/admin/ar
 
   const { error } = await supabaseAdmin
     .from('articles')
-    .update({ title, slug, excerpt, content, cover_image, match_id, league_id, author, status, published_at, content_type: content_type || 'article' })
+    .update({ 
+      title, slug, excerpt, content, cover_image, match_id, league_id, author, status, published_at, 
+      content_type: content_type || 'article',
+      page_type: content_type === 'page_content' ? page_type : null
+    })
     .eq('id', id)
 
   if (error) {
