@@ -17,6 +17,7 @@ interface ArticleFormData {
   status: 'draft' | 'published'
   content_type: 'article' | 'page_content'
   page_type: 'league_intro' | 'team_intro' | 'odds_guide' | 'standings_guide' | 'fixtures_guide' | 'general' | ''
+  page_path: string
 }
 
 interface Props {
@@ -53,7 +54,25 @@ export default function ArticleForm({ initialData }: Props) {
     status: initialData?.status ?? 'draft',
     content_type: (initialData as any)?.content_type ?? 'article',
     page_type: (initialData as any)?.page_type ?? '',
+    page_path: (initialData as any)?.page_path ?? '',
   })
+  
+  // Auto-generate page_path when page_type or IDs change
+  function updatePagePath(pageType: string, leagueId: string, matchId: string) {
+    let path = ''
+    if (pageType === 'league_intro' && leagueId) {
+      path = `/giai-dau/${leagueId}`
+    } else if (pageType === 'team_intro' && matchId) {
+      path = `/doi-bong/${matchId}`
+    } else if (pageType === 'odds_guide') {
+      path = '/ty-le-keo'
+    } else if (pageType === 'standings_guide') {
+      path = '/bang-xep-hang'
+    } else if (pageType === 'fixtures_guide') {
+      path = '/lich-thi-dau'
+    }
+    return path
+  }
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [showPreview, setShowPreview] = useState(false)
@@ -156,6 +175,7 @@ export default function ArticleForm({ initialData }: Props) {
       published_at: status === 'published' ? new Date().toISOString() : null,
       content_type: form.content_type,
       page_type: form.content_type === 'page_content' ? form.page_type : null,
+      page_path: form.content_type === 'page_content' ? form.page_path : null,
     }
 
     const url = isEdit ? `/api/admin/articles/${initialData!.id}` : '/api/admin/articles'
@@ -219,7 +239,11 @@ export default function ArticleForm({ initialData }: Props) {
             </label>
             <select
               value={form.page_type}
-              onChange={(e) => setForm((f) => ({ ...f, page_type: e.target.value as any }))}
+              onChange={(e) => {
+                const newPageType = e.target.value as any
+                const newPath = updatePagePath(newPageType, form.league_id, form.match_id)
+                setForm((f) => ({ ...f, page_type: newPageType, page_path: newPath }))
+              }}
               className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
             >
               <option value="">-- Chọn loại trang --</option>
@@ -230,6 +254,11 @@ export default function ArticleForm({ initialData }: Props) {
               <option value="fixtures_guide">Hướng dẫn lịch thi đấu</option>
               <option value="general">Khác</option>
             </select>
+            {form.page_path && (
+              <p className="mt-1 text-xs text-green-600">
+                📍 Hiển thị tại: <strong>{form.page_path}</strong>
+              </p>
+            )}
           </div>
         )}
       </div>
@@ -324,7 +353,11 @@ export default function ArticleForm({ initialData }: Props) {
           <input
             type="number"
             value={form.match_id}
-            onChange={(e) => setForm((f) => ({ ...f, match_id: e.target.value }))}
+            onChange={(e) => {
+              const newMatchId = e.target.value
+              const newPath = updatePagePath(form.page_type, form.league_id, newMatchId)
+              setForm((f) => ({ ...f, match_id: newMatchId, page_path: newPath }))
+            }}
             placeholder={form.page_type === 'team_intro' ? '33' : '1035066'}
             className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
           />
@@ -336,7 +369,11 @@ export default function ArticleForm({ initialData }: Props) {
           <input
             type="number"
             value={form.league_id}
-            onChange={(e) => setForm((f) => ({ ...f, league_id: e.target.value }))}
+            onChange={(e) => {
+              const newLeagueId = e.target.value
+              const newPath = updatePagePath(form.page_type, newLeagueId, form.match_id)
+              setForm((f) => ({ ...f, league_id: newLeagueId, page_path: newPath }))
+            }}
             placeholder={
               form.page_type === 'league_intro' ? '39' :
               form.page_type === 'team_intro' ? '-1' :

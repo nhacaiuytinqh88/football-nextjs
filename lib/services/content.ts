@@ -14,65 +14,15 @@ export interface PageContent {
 }
 
 /**
- * Lấy nội dung cho trang giải đấu
- * Quy ước: content_type = 'page_content', page_type = 'league_intro', league_id có giá trị
+ * Lấy nội dung cho bất kỳ trang nào dựa trên page_path
+ * @param pagePath - Đường dẫn trang (VD: '/giai-dau/39', '/ty-le-keo', '/lich-thi-dau')
  */
-export async function getLeagueContent(leagueId: number): Promise<PageContent | null> {
+export async function getPageContentByPath(pagePath: string): Promise<PageContent | null> {
   const { data, error } = await supabase
     .from('articles')
     .select('*')
     .eq('content_type', 'page_content')
-    .eq('page_type', 'league_intro')
-    .eq('league_id', leagueId)
-    .eq('status', 'published')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
-  if (error) {
-    console.error('Error fetching league content:', error)
-    return null
-  }
-
-  return data
-}
-
-/**
- * Lấy nội dung cho trang đội bóng
- * Quy ước: content_type = 'page_content', page_type = 'team_intro', match_id = team_id
- */
-export async function getTeamContent(teamId: number): Promise<PageContent | null> {
-  const { data, error } = await supabase
-    .from('articles')
-    .select('*')
-    .eq('content_type', 'page_content')
-    .eq('page_type', 'team_intro')
-    .eq('match_id', teamId)
-    .eq('status', 'published')
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .maybeSingle()
-
-  if (error) {
-    console.error('Error fetching team content:', error)
-    return null
-  }
-
-  return data
-}
-
-/**
- * Lấy nội dung cho các trang tĩnh (odds guide, standings guide, etc.)
- * Quy ước: content_type = 'page_content', page_type = loại trang
- */
-export async function getPageContent(
-  pageType: 'odds_guide' | 'standings_guide' | 'fixtures_guide'
-): Promise<PageContent | null> {
-  const { data, error } = await supabase
-    .from('articles')
-    .select('*')
-    .eq('content_type', 'page_content')
-    .eq('page_type', pageType)
+    .eq('page_path', pagePath)
     .eq('status', 'published')
     .order('created_at', { ascending: false })
     .limit(1)
@@ -84,4 +34,32 @@ export async function getPageContent(
   }
 
   return data
+}
+
+/**
+ * Lấy nội dung cho trang giải đấu
+ */
+export async function getLeagueContent(leagueId: number): Promise<PageContent | null> {
+  return getPageContentByPath(`/giai-dau/${leagueId}`)
+}
+
+/**
+ * Lấy nội dung cho trang đội bóng
+ */
+export async function getTeamContent(teamId: number): Promise<PageContent | null> {
+  return getPageContentByPath(`/doi-bong/${teamId}`)
+}
+
+/**
+ * Lấy nội dung cho các trang tĩnh
+ */
+export async function getPageContent(
+  pageType: 'odds' | 'standings' | 'fixtures'
+): Promise<PageContent | null> {
+  const pathMap = {
+    odds: '/ty-le-keo',
+    standings: '/bang-xep-hang',
+    fixtures: '/lich-thi-dau',
+  }
+  return getPageContentByPath(pathMap[pageType])
 }

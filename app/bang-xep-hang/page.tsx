@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { BarChart2 } from 'lucide-react'
 import { getStandings, TRACKED_LEAGUES, CURRENT_SEASON } from '@/lib/services/standings'
 import StandingsTable from '@/components/ui/StandingsTable'
+import PageContentSection from '@/components/ui/PageContent'
+import { getPageContent } from '@/lib/services/content'
 
 export const metadata: Metadata = {
   title: 'Bảng xếp hạng bóng đá',
@@ -37,9 +39,15 @@ export default async function BangXepHangPage(props: PageProps<'/bang-xep-hang'>
     : TRACKED_LEAGUES[0].id
 
   const selectedLeague = TRACKED_LEAGUES.find((l) => l.id === selectedLeagueId) ?? TRACKED_LEAGUES[0]
+  
+  // Lấy nội dung trang (nếu có)
+  const pageContent = await getPageContent('standings')
 
   return (
     <div className="space-y-3">
+      {/* Nội dung trang (nếu có) */}
+      {pageContent && <PageContentSection content={pageContent} />}
+      
       <div className="rounded-xl bg-white shadow-sm overflow-hidden">
         {/* Header */}
         <div className="flex items-center gap-2 bg-green-700 px-4 py-3">

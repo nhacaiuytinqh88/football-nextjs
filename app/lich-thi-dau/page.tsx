@@ -5,6 +5,8 @@ import Link from 'next/link'
 import FixtureList from '@/components/ui/FixtureList'
 import { getFixturesByDate } from '@/lib/services/fixtures'
 import { getVNDateString, formatShortDate } from '@/lib/date'
+import PageContentSection from '@/components/ui/PageContent'
+import { getPageContent } from '@/lib/services/content'
 
 export const metadata: Metadata = {
   title: 'Lịch thi đấu bóng đá hôm nay',
@@ -56,9 +58,15 @@ export default async function LichThiDauPage(props: PageProps<'/lich-thi-dau'>) 
   prevDate.setDate(prevDate.getDate() - 1)
   const nextDate = new Date(selectedDate)
   nextDate.setDate(nextDate.getDate() + 1)
+  
+  // Lấy nội dung trang (nếu có)
+  const pageContent = await getPageContent('fixtures')
 
   return (
     <div className="space-y-3">
+      {/* Nội dung trang (nếu có) */}
+      {pageContent && <PageContentSection content={pageContent} />}
+      
       {/* Date picker */}
       <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
         <div className="flex items-center gap-2 bg-green-700 px-4 py-3">
