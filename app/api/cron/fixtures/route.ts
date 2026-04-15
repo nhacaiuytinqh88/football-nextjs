@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { refreshFixturesByDate } from '@/lib/services/fixtures'
+import { getVNDateString } from '@/lib/date'
 
 // Cronjob chạy mỗi ngày lúc 00:01 để cập nhật lịch thi đấu hôm nay và ngày mai
 export async function GET(request: NextRequest) {
@@ -9,15 +10,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Lấy ngày hôm nay và ngày mai (timezone VN)
-    const getDateVN = (offsetDays = 0) => {
-      const d = new Date()
-      d.setDate(d.getDate() + offsetDays)
-      return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' })
-    }
-
-    const today = getDateVN(0)
-    const tomorrow = getDateVN(1)
+    const today = getVNDateString(0)
+    const tomorrow = getVNDateString(1)
 
     const [todayFixtures, tomorrowFixtures] = await Promise.all([
       refreshFixturesByDate(today),

@@ -1,6 +1,7 @@
 import 'server-only'
 import { redis, CACHE_KEYS, CACHE_TTL } from '@/lib/redis'
 import { fetchFixturesByDate, fetchFixtureById, type Fixture } from '@/lib/api-football'
+import { getVNDateString } from '@/lib/date'
 
 /**
  * Lấy lịch thi đấu theo ngày.
@@ -22,8 +23,7 @@ export async function getFixturesByDate(date: string): Promise<Fixture[]> {
  * Lấy lịch thi đấu hôm nay (timezone Asia/Ho_Chi_Minh)
  */
 export async function getTodayFixtures(): Promise<Fixture[]> {
-  const today = new Date()
-    .toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }) // YYYY-MM-DD
+  const today = getVNDateString(0)
   return getFixturesByDate(today)
 }
 

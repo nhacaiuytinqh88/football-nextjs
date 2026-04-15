@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { PlusCircle, Pencil, Trash2 } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import DeleteArticleButton from './DeleteArticleButton'
+import { formatAdminDate } from '@/lib/date'
 
 export const metadata: Metadata = { title: 'Quản lý bài viết' }
 
@@ -65,7 +66,7 @@ export default async function BaiVietPage() {
                     {a.match_id ?? '—'}
                   </td>
                   <td className="px-4 py-3 text-xs text-gray-400">
-                    {new Date(a.created_at).toLocaleDateString('vi-VN')}
+                    {formatAdminDate(a.created_at)}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">

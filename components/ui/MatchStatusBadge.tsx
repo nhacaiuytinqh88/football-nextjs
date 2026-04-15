@@ -1,8 +1,10 @@
+import { formatMatchTime } from '@/lib/date'
+
 // Server Component - hiển thị trạng thái trận đấu
 interface Props {
-  status: string  // 'NS' | '1H' | 'HT' | '2H' | 'FT' | 'AET' | 'PEN' | 'PST' | 'CANC'
+  status: string
   elapsed: number | null
-  date: string    // ISO string
+  date: string    // ISO string từ API-Football (UTC)
 }
 
 export default function MatchStatusBadge({ status, elapsed, date }: Props) {
@@ -40,13 +42,9 @@ export default function MatchStatusBadge({ status, elapsed, date }: Props) {
     )
   }
 
-  // Chưa bắt đầu - hiển thị giờ
+  // Chưa bắt đầu - hiển thị giờ VN
   if (status === 'NS') {
-    const time = new Date(date).toLocaleTimeString('vi-VN', {
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZone: 'Asia/Ho_Chi_Minh',
-    })
+    const time = formatMatchTime(date)
     return (
       <div className="flex flex-col items-center min-w-[40px]">
         <span className="text-sm font-semibold text-gray-700 leading-none">{time}</span>

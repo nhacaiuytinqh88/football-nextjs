@@ -135,15 +135,6 @@
 ```
 
 ## 8. Current Context & Next Step
-- **Current Status:** ✅ TẤT CẢ 5 PHASE HOÀN THÀNH. Deploy target: Railway.
-- **Để deploy lên Railway:**
-  1. Vào [railway.app](https://railway.app) → **New Project** → **Deploy from GitHub repo**
-  2. Chọn repo `ruanshan2110/football-nextjs`
-  3. Thêm tất cả biến từ `.env.local` vào **Variables** tab
-  4. Railway tự detect `railway.toml` và build với Nixpacks
-  5. Sau khi deploy xong, lấy domain Railway cấp → điền vào biến `NEXT_PUBLIC_SITE_URL`
-- **Cron Jobs trên Railway** (tạo thêm 3 Cron Service riêng):
-  - `npx tsx scripts/cron-live.ts` — schedule `* * * * *` (mỗi phút)
-  - `npx tsx scripts/cron-standings.ts` — schedule `0 * * * *` (mỗi giờ)
-  - `npx tsx scripts/cron-fixtures.ts` — schedule `1 0 * * *` (mỗi ngày 00:01)
-- **Sau deploy:** Chạy `supabase/schema.sql` trong Supabase Dashboard → SQL Editor (nếu chưa làm).
+- **Current Status:** ✅ TẤT CẢ 5 PHASE HOÀN THÀNH. Đã deploy lên **Netlify** thành công. 3 Scheduled Functions đang hoạt động. Timezone đã được chuẩn hóa toàn bộ về UTC+7.
+- **Timezone:** Tất cả xử lý ngày/giờ tập trung tại `lib/date.ts`. Không còn inline `toLocaleString` rải rác.
+- **Next Step:** Tiếp tục hoàn thiện theo yêu cầu của người dùng.

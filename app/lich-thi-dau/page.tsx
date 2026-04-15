@@ -4,22 +4,20 @@ import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import FixtureList from '@/components/ui/FixtureList'
 import { getFixturesByDate } from '@/lib/services/fixtures'
+import { getVNDateString, formatShortDate } from '@/lib/date'
 
 export const metadata: Metadata = {
   title: 'Lịch thi đấu bóng đá hôm nay',
   description: 'Lịch thi đấu bóng đá hôm nay và sắp tới của các giải đấu hàng đầu thế giới.',
 }
 
-// Helper lấy ngày VN
+// Helper lấy ngày VN — dùng từ lib/date
 function getVNDate(offsetDays = 0): string {
-  const d = new Date()
-  d.setDate(d.getDate() + offsetDays)
-  return d.toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' })
+  return getVNDateString(offsetDays)
 }
 
 function formatDisplayDate(dateStr: string): string {
-  const d = new Date(dateStr + 'T00:00:00')
-  return d.toLocaleDateString('vi-VN', { weekday: 'short', day: '2-digit', month: '2-digit' })
+  return formatShortDate(dateStr)
 }
 
 // Skeleton

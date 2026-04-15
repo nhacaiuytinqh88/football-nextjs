@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase'
 import { getFixtureDetail } from '@/lib/services/fixtures'
 import MatchStatusBadge from '@/components/ui/MatchStatusBadge'
 import { articleJsonLd } from '@/lib/json-ld'
+import { formatArticleDateTime } from '@/lib/date'
 
 // Dynamic metadata
 export async function generateMetadata(props: PageProps<'/nhan-dinh/[slug]'>): Promise<Metadata> {
@@ -92,13 +93,7 @@ export default async function NhanDinhDetailPage(props: PageProps<'/nhan-dinh/[s
             </div>
             <div className="flex items-center gap-1">
               <Clock size={11} />
-              <span>
-                {new Date(article.published_at).toLocaleString('vi-VN', {
-                  day: '2-digit', month: '2-digit', year: 'numeric',
-                  hour: '2-digit', minute: '2-digit',
-                  timeZone: 'Asia/Ho_Chi_Minh',
-                })}
-              </span>
+              <span>{formatArticleDateTime(article.published_at)}</span>
             </div>
           </div>
 

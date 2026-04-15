@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { FileText, PlusCircle, Eye } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { formatAdminDate } from '@/lib/date'
 
 export const metadata: Metadata = { title: 'Dashboard' }
 
@@ -73,7 +74,7 @@ export default async function AdminDashboard() {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-800 truncate">{a.title}</p>
                 <p className="text-xs text-gray-400">
-                  {new Date(a.created_at).toLocaleDateString('vi-VN')}
+                  {formatAdminDate(a.created_at)}
                 </p>
               </div>
               <span className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
