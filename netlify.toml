@@ -1,0 +1,15 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# Netlify tự detect Next.js qua OpenNext adapter
+# Không cần config thêm cho SSR, ISR, Route Handlers, Middleware
+
+# Scheduled Functions cho cronjob
+# Thay thế vercel.json crons
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
