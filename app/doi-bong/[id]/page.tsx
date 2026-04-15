@@ -8,6 +8,8 @@ import { getTeamById, getTeamStatistics, getTeamFixtures, getTeamLeagues } from 
 import { TRACKED_LEAGUES } from '@/lib/services/standings'
 import FixtureList from '@/components/ui/FixtureList'
 import BackButton from '@/components/ui/BackButton'
+import PageContentSection from '@/components/ui/PageContent'
+import { getTeamContent } from '@/lib/services/content'
 
 export async function generateMetadata(props: PageProps<'/doi-bong/[id]'>): Promise<Metadata> {
   const { id } = await props.params
@@ -258,9 +260,17 @@ export default async function DoiBongPage(props: PageProps<'/doi-bong/[id]'>) {
   const trackedLeague = TRACKED_LEAGUES.find(l => l.id === leagueId)
   const season = trackedLeague?.season ?? (teamLeagues.length > 0 ? 2025 : 2026)
 
+  // Lấy nội dung giới thiệu đội bóng
+  const teamContent = await getTeamContent(teamId)
+
   return (
     <div className="space-y-4">
       <BackButton />
+
+      {/* Nội dung giới thiệu đội bóng */}
+      {teamContent && (
+        <PageContentSection content={teamContent} />
+      )}
 
       <div className="rounded-xl bg-white shadow-sm overflow-hidden">
         {/* Header */}

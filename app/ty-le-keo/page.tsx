@@ -14,6 +14,8 @@ import { TRACKED_LEAGUES } from '@/lib/services/standings'
 import type { FixtureOdds } from '@/lib/api-football'
 import { BookmakerSelect } from './BookmakerSelect'
 import { OddsMatchRow } from './OddsMatchRow'
+import PageContentSection from '@/components/ui/PageContent'
+import { getPageContent } from '@/lib/services/content'
 
 export const metadata: Metadata = {
   title: 'Tỷ lệ kèo bóng đá',
@@ -166,12 +168,20 @@ export default async function TyLeKeoPage(props: PageProps<'/ty-le-keo'>) {
 
   const selectedLeague = TRACKED_LEAGUES.find(l => l.id === selectedLeagueId) ?? TRACKED_LEAGUES[0]
   
-  // Lấy danh sách bookmakers
-  const bookmakers = await getBookmakers()
+  // Lấy danh sách bookmakers và nội dung hướng dẫn
+  const [bookmakers, oddsGuide] = await Promise.all([
+    getBookmakers(),
+    getPageContent('odds_guide'),
+  ])
   const selectedBookmaker = bookmakers.find(b => b.id === selectedBookmakerId) ?? { id: 8, name: 'Bet365' }
 
   return (
     <div className="space-y-3">
+      {/* Hướng dẫn tỷ lệ kèo */}
+      {oddsGuide && (
+        <PageContentSection content={oddsGuide} />
+      )}
+
       <div className="rounded-xl bg-white shadow-sm overflow-hidden">
         {/* Header */}
         <div className="flex items-center gap-2 bg-green-700 px-4 py-3">

@@ -9,7 +9,9 @@ import { getStandings, CURRENT_SEASON, TRACKED_LEAGUES } from '@/lib/services/st
 import FixtureList from '@/components/ui/FixtureList'
 import StandingsTable from '@/components/ui/StandingsTable'
 import ArticleCard from '@/components/ui/ArticleCard'
+import PageContentSection from '@/components/ui/PageContent'
 import { supabase } from '@/lib/supabase'
+import { getLeagueContent } from '@/lib/services/content'
 
 export async function generateMetadata(props: PageProps<'/giai-dau/[id]'>): Promise<Metadata> {
   const { id } = await props.params
@@ -84,9 +86,10 @@ export default async function GiaiDauPage(props: PageProps<'/giai-dau/[id]'>) {
   const { tab, round: roundParam } = await props.searchParams ?? {}
   const leagueId = parseInt(id)
 
-  const [league, rounds] = await Promise.all([
+  const [league, rounds, leagueContent] = await Promise.all([
     getLeagueById(leagueId),
     getLeagueRounds(leagueId, TRACKED_LEAGUES.find(l => l.id === leagueId)?.season ?? CURRENT_SEASON),
+    getLeagueContent(leagueId),
   ])
 
   if (!league) notFound()
@@ -110,6 +113,11 @@ export default async function GiaiDauPage(props: PageProps<'/giai-dau/[id]'>) {
 
   return (
     <div className="space-y-4">
+      {/* Nội dung giới thiệu giải đấu */}
+      {leagueContent && (
+        <PageContentSection content={leagueContent} />
+      )}
+
       {/* Header giải đấu */}
       <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
         <div className="flex items-center gap-3 bg-gray-800 px-4 py-4">
