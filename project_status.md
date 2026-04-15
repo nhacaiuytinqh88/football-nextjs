@@ -45,11 +45,10 @@
   - [x] Thay emoji bằng logo image từ API-Football
   - [x] Fix season: EU=2025, V.League=2026, V.League ID 197→340
 - [x] **Đang thực hiện:**
-  - [x] MatchStatusBadge: hiển thị ngày bên dưới giờ khi trận không phải hôm nay, hoặc khi `showDate=true`
-  - [x] `lib/date.ts`: thêm `formatMatchDate()` và `isToday()`
-  - [x] `FixtureList` + `MatchRow`: thêm prop `showDate` truyền xuống badge
-  - [x] Trang giải đấu: `getCurrentRound()` tự tìm vòng đang diễn ra (LIVE → sắp đá 3 ngày → đã kết thúc gần nhất)
-  - [x] Trang đội bóng + giải đấu: truyền `showDate={true}` để luôn hiện ngày
+  - [x] Trang đội bóng: lấy giải đấu thực tế của đội từ API (không hardcode TRACKED_LEAGUES), tab giải có logo, thống kê đầy đủ (form, W/D/L%, bàn thắng/thua, sân nhà vs khách, clean sheet, kết quả đáng nhớ)
+  - [x] Trang chi tiết trận: thêm Events (bàn thắng ⚽, thẻ phạt, VAR), Statistics (bar chart 2 đội), Lineups (đội hình + dự bị + HLV)
+  - [x] `fetchFixtureDetails`, `fetchTeamLeagues` — API functions mới
+  - [x] `getFixtureDetails`, `getTeamLeagues` — service functions mới với Redis cache
 
 ## 6. Installed Dependencies
 ```json
