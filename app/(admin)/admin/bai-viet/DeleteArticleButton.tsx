@@ -8,6 +8,9 @@ export default function DeleteArticleButton({ id, title }: { id: string; title: 
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
+  // Debug log
+  console.log('DeleteArticleButton rendered for:', id, title)
+
   async function handleDelete() {
     if (!confirm(`⚠️ Xóa bài viết "${title}"?\n\nHành động này không thể hoàn tác!`)) return
 
@@ -29,6 +32,7 @@ export default function DeleteArticleButton({ id, title }: { id: string; title: 
       disabled={loading}
       className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 hover:text-red-700 border border-red-200 hover:border-red-300 transition-colors disabled:opacity-50"
       title="Xóa bài viết"
+      style={{ minWidth: '70px' }}
     >
       {loading ? (
         <>

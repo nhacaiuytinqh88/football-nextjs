@@ -1,22 +1,24 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { PlusCircle, Pencil, Trash2 } from 'lucide-react'
+import { PlusCircle, Pencil } from 'lucide-react'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import DeleteArticleButton from './DeleteArticleButton'
 import { formatAdminDate } from '@/lib/date'
+import DeleteArticleButton from './DeleteArticleButton'
 
 export const metadata: Metadata = { title: 'Quản lý bài viết' }
 
 export default async function BaiVietPage() {
-  const { data: articles } = await supabaseAdmin
+  const { data: articles, error } = await supabaseAdmin
     .from('articles')
     .select('id, title, slug, status, match_id, published_at, created_at')
     .order('created_at', { ascending: false })
 
+  console.log('Articles fetched:', articles?.length, 'Error:', error)
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">Bài viết</h1>
+        <h1 className="text-xl font-bold text-gray-900">Bài viết ({articles?.length || 0})</h1>
         <Link
           href="/admin/bai-viet/tao-moi"
           className="flex items-center gap-2 rounded-lg bg-green-700 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 transition-colors"
