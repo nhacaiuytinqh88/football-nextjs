@@ -6,7 +6,7 @@ import LeftSidebar from '@/components/layout/LeftSidebar'
 import RightSidebar from '@/components/layout/RightSidebar'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://bongdalive.com'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://www.techshift.vn'
 
 export const viewport: Viewport = {
   themeColor: '#15803d',
@@ -18,14 +18,14 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'BongDaWap - Cập nhật bóng đá 24/7',
-    template: '%s | BongDaWap',
+    default: 'TechShift - Cập nhật bóng đá 24/7',
+    template: '%s | TechShift',
   },
   description:
     'Nơi cập nhật tin tức bóng đá nhanh nhất Việt Nam. Livescore trực tiếp, kết quả, bảng xếp hạng, tỷ lệ kèo và nhận định chuyên sâu.',
-  keywords: ['bongdawap', 'livescore', 'bóng đá', 'kết quả bóng đá', 'bảng xếp hạng', 'nhận định', 'tỷ lệ kèo', 'premier league', 'la liga'],
-  authors: [{ name: 'BongDaWap' }],
-  creator: 'BongDaWap',
+  keywords: ['techshift', 'livescore', 'bóng đá', 'kết quả bóng đá', 'bảng xếp hạng', 'nhận định', 'tỷ lệ kèo', 'premier league', 'la liga'],
+  authors: [{ name: 'TechShift' }],
+  creator: 'TechShift',
   verification: {
     google: 'Vq4mUNKg6nJz3BvJkmpAo0K2c7YUNcC5q8h15bO2IVA',
   },
@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'vi_VN',
     url: BASE_URL,
-    siteName: 'BongDaWap',
-    title: 'BongDaWap - Cập nhật bóng đá 24/7',
+    siteName: 'TechShift',
+    title: 'TechShift - Cập nhật bóng đá 24/7',
     description: 'Nơi cập nhật tin tức bóng đá nhanh nhất Việt Nam. Livescore trực tiếp, kết quả, bảng xếp hạng và nhận định chuyên sâu.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BongDaWap',
+    title: 'TechShift',
     description: 'Cập nhật bóng đá 24/7 - Livescore, kết quả, BXH và nhận định.',
   },
   alternates: {

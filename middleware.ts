@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 // Cấu hình chuyển hướng domain
 const DOMAIN_REDIRECTS = {
-  // Thay đổi các domain này theo nhu cầu
-  'old-domain.com': 'https://bongdalive.com',
-  'www.old-domain.com': 'https://bongdalive.com',
-  // Thêm các domain cũ khác nếu cần
-  // 'another-old-domain.com': 'https://bongdalive.com',
+  // Chuyển hướng từ Netlify domain cũ sang domain mới
+  'football-nextjs.netlify.app': 'https://www.techshift.vn',
+  // Chuyển hướng non-www sang www
+  'techshift.vn': 'https://www.techshift.vn',
+  // Backup cho các domain cũ khác nếu có
+  'bongdalive.com': 'https://www.techshift.vn',
+  'www.bongdalive.com': 'https://www.techshift.vn',
 }
 
 export function middleware(request: NextRequest) {
@@ -25,15 +27,6 @@ export function middleware(request: NextRequest) {
     const newUrl = `${redirectTo}${url.pathname}${url.search}`
     
     // Chuyển hướng 301 (permanent redirect) - tốt cho SEO
-    return NextResponse.redirect(newUrl, 301)
-  }
-
-  // Chuyển hướng www sang non-www (tùy chọn)
-  if (hostname.startsWith('www.') && !DOMAIN_REDIRECTS[hostname]) {
-    const nonWwwDomain = hostname.slice(4) // Bỏ "www."
-    const url = new URL(request.url)
-    const newUrl = `${url.protocol}//${nonWwwDomain}${url.pathname}${url.search}`
-    
     return NextResponse.redirect(newUrl, 301)
   }
 

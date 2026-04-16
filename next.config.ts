@@ -19,34 +19,42 @@ const nextConfig: NextConfig = {
   // Cấu hình chuyển hướng
   async redirects() {
     return [
-      // Chuyển hướng từ domain cũ sang domain mới
-      // Uncomment và thay đổi domain theo nhu cầu
-      /*
+      // Chuyển hướng từ Netlify domain cũ sang domain mới
       {
         source: '/:path*',
         has: [
           {
             type: 'host',
-            value: 'old-domain.com', // Thay bằng domain cũ
+            value: 'football-nextjs.netlify.app',
           },
         ],
-        destination: 'https://bongdalive.com/:path*',
+        destination: 'https://www.techshift.vn/:path*',
         permanent: true, // 301 redirect
       },
+      // Chuyển hướng non-www sang www
       {
         source: '/:path*',
         has: [
           {
             type: 'host',
-            value: 'www.old-domain.com', // Thay bằng www.domain-cũ
+            value: 'techshift.vn',
           },
         ],
-        destination: 'https://bongdalive.com/:path*',
+        destination: 'https://www.techshift.vn/:path*',
         permanent: true,
       },
-      */
-      
-      // Chuyển hướng www sang non-www (tùy chọn)
+      // Chuyển hướng domain cũ bongdalive.com nếu có
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'bongdalive.com',
+          },
+        ],
+        destination: 'https://www.techshift.vn/:path*',
+        permanent: true,
+      },
       {
         source: '/:path*',
         has: [
@@ -55,7 +63,7 @@ const nextConfig: NextConfig = {
             value: 'www.bongdalive.com',
           },
         ],
-        destination: 'https://bongdalive.com/:path*',
+        destination: 'https://www.techshift.vn/:path*',
         permanent: true,
       },
     ]

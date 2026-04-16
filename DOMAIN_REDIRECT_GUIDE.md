@@ -1,57 +1,84 @@
 # Hướng dẫn thiết lập chuyển hướng domain
 
+## Cấu hình hiện tại
+- **Domain cũ:** `football-nextjs.netlify.app`
+- **Domain mới:** `www.techshift.vn`
+- **Chuyển hướng:** 301 (permanent redirect)
+
 ## 1. Sử dụng Next.js (Đã cấu hình)
 
-### Middleware (middleware.ts)
-- Chỉnh sửa object `DOMAIN_REDIRECTS` trong file `middleware.ts`
-- Thêm domain cũ và domain mới tương ứng
-- Tự động giữ nguyên path và query parameters
+### Middleware (middleware.ts) ✅
+- Chuyển hướng `football-nextjs.netlify.app` → `www.techshift.vn`
+- Chuyển hướng `techshift.vn` → `www.techshift.vn` (non-www to www)
+- Chuyển hướng các domain cũ khác nếu có
 
-### Next.js Config (next.config.ts)
-- Uncomment và chỉnh sửa phần redirects trong `next.config.ts`
-- Thay đổi `old-domain.com` thành domain cũ thực tế
+### Next.js Config (next.config.ts) ✅
+- Cấu hình redirects trong next.config.ts
+- Hỗ trợ chuyển hướng dựa trên hostname
 
-## 2. Cấu hình Server (Nginx/Apache)
+## 2. Cấu hình Netlify (Cho domain cũ)
+
+### _redirects file (Tạo trong public/)
+```
+# Chuyển hướng toàn bộ site
+https://football-nextjs.netlify.app/* https://www.techshift.vn/:splat 301!
+```
+
+### netlify.toml
+```toml
+[[redirects]]
+  from = "https://football-nextjs.netlify.app/*"
+  to = "https://www.techshift.vn/:splat"
+  status = 301
+  force = true
+```
+
+## 3. Cấu hình Server (Nginx/Apache) cho domain mới
 
 ### Nginx
 ```nginx
 server {
     listen 80;
     listen 443 ssl;
-    server_name old-domain.com www.old-domain.com;
+    server_name techshift.vn;
     
-    # SSL certificates (nếu có)
-    # ssl_certificate /path/to/certificate.crt;
-    # ssl_certificate_key /path/to/private.key;
+    return 301 https://www.techshift.vn$request_uri;
+}
+
+server {
+    listen 80;
+    listen 443 ssl;
+    server_name football-nextjs.netlify.app;
     
-    return 301 https://bongdalive.com$request_uri;
+    return 301 https://www.techshift.vn$request_uri;
 }
 ```
 
-### Apache (.htaccess)
-```apache
-RewriteEngine On
-RewriteCond %{HTTP_HOST} ^(www\.)?old-domain\.com$ [NC]
-RewriteRule ^(.*)$ https://bongdalive.com/$1 [R=301,L]
+## 4. Cấu hình DNS
+1. Trỏ `techshift.vn` và `www.techshift.vn` về server mới
+2. A record: `www.techshift.vn` → IP server
+3. CNAME: `techshift.vn` → `www.techshift.vn`
+
+## 5. Kiểm tra chuyển hướng
+```bash
+# Kiểm tra Netlify domain cũ
+curl -I https://football-nextjs.netlify.app
+
+# Kiểm tra non-www
+curl -I https://techshift.vn
+
+# Kết quả mong đợi: HTTP/1.1 301 Moved Permanently
+# Location: https://www.techshift.vn/
 ```
 
-## 3. Cấu hình DNS
-1. Trỏ domain cũ về cùng server với domain mới
-2. Hoặc sử dụng CNAME record trỏ về domain mới
+## 6. SEO Checklist
+- ✅ Sử dụng 301 redirect (permanent)
+- ⏳ Cập nhật Google Search Console với domain mới
+- ⏳ Submit sitemap mới: `https://www.techshift.vn/sitemap.xml`
+- ⏳ Cập nhật Google Analytics
+- ⏳ Thông báo thay đổi domain cho các backlinks quan trọng
 
-## 4. Cloudflare (nếu sử dụng)
-1. Vào Cloudflare Dashboard
-2. Chọn domain cũ
-3. Vào Rules > Page Rules
-4. Tạo rule: `old-domain.com/*` → `https://bongdalive.com/$1` (301 redirect)
-
-## 5. Kiểm tra
-- Sử dụng curl: `curl -I http://old-domain.com`
-- Kiểm tra HTTP status code 301
-- Verify redirect URL đúng
-
-## Lưu ý SEO
-- Sử dụng 301 redirect (permanent) để giữ SEO ranking
-- Cập nhật Google Search Console với domain mới
-- Submit sitemap mới
-- Cập nhật backlinks quan trọng
+## 7. Monitoring
+- Theo dõi traffic chuyển hướng
+- Kiểm tra 404 errors
+- Monitor SEO rankings sau khi chuyển domain

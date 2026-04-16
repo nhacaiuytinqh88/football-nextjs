@@ -13,3 +13,10 @@
 # Thay thế vercel.json crons
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Domain redirects - chuyển hướng từ domain cũ sang domain mới
+[[redirects]]
+  from = "https://football-nextjs.netlify.app/*"
+  to = "https://www.techshift.vn/:splat"
+  status = 301
+  force = true
