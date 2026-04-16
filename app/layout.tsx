@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'TechShift' }],
   creator: 'TechShift',
   verification: {
-    google: 'Vq4mUNKg6nJz3BvJkmpAo0K2c7YUNcC5q8h15bO2IVA',
+    google: 'PLt30fBQlcTM1BKCaUVZwgHS6447VDbjJjcbbedM4qM',
   },
   openGraph: {
     type: 'website',
