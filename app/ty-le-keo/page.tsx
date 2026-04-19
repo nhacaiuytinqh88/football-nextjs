@@ -47,7 +47,7 @@ async function OddsSection({ leagueId, bookmakerId }: { leagueId: number; bookma
 
   if (odds.length === 0) {
     return (
-      <div className="px-4 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+      <div className="px-4 py-8 text-center text-sm text-gray-400">
         Hiện không có trận sắp diễn ra cho giải này
       </div>
     )
@@ -84,12 +84,12 @@ async function OddsSection({ leagueId, bookmakerId }: { leagueId: number; bookma
         return (
           <div key={league.id}>
             {/* Header giải */}
-            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 px-3 py-2">
+            <div className="flex items-center gap-2 bg-gray-100 px-3 py-2">
               <div className="relative h-4 w-4 shrink-0">
                 <Image src={league.logo} alt={league.name} fill className="object-contain" sizes="16px" />
               </div>
-              <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">{league.country} · {league.name}</span>
-              <div className="ml-auto flex items-center gap-3 text-[10px] text-green-700 dark:text-green-400">
+              <span className="text-xs font-semibold text-gray-600">{league.country} · {league.name}</span>
+              <div className="ml-auto flex items-center gap-3 text-[10px] text-green-700">
                 <Link href={`/giai-dau/${league.id}?tab=lich`} className="hover:underline">Lịch</Link>
                 <Link href={`/giai-dau/${league.id}?tab=bxh`} className="hover:underline">BXH</Link>
               </div>
@@ -190,17 +190,17 @@ export default async function TyLeKeoPage(props: PageProps<'/ty-le-keo'>) {
 
   return (
     <div className="space-y-3">
-      <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
+      <div className="rounded-xl bg-white shadow-sm overflow-hidden">
         {/* Header */}
-        <div className="flex items-center gap-2 bg-green-700 dark:bg-green-800 px-4 py-3">
+        <div className="flex items-center gap-2 bg-green-700 px-4 py-3">
           <TrendingUp size={15} className="text-white" />
           <h1 className="text-sm font-semibold text-white">Tỷ lệ kèo</h1>
-          <span className="ml-auto text-xs text-green-200 dark:text-green-300">{selectedBookmaker.name}</span>
+          <span className="ml-auto text-xs text-green-200">{selectedBookmaker.name}</span>
         </div>
 
         {/* Chọn bookmaker */}
-        <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-          <span className="text-xs text-gray-600 dark:text-gray-300 font-medium">Nhà cái:</span>
+        <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border-b border-gray-200">
+          <span className="text-xs text-gray-600 font-medium">Nhà cái:</span>
           <BookmakerSelect 
             bookmakers={bookmakers} 
             selectedId={selectedBookmakerId}
@@ -209,7 +209,7 @@ export default async function TyLeKeoPage(props: PageProps<'/ty-le-keo'>) {
         </div>
 
         {/* Tab chọn giải */}
-        <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-100 dark:border-gray-700">
+        <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-100">
           {TRACKED_LEAGUES.map((league) => {
             const isActive = league.id === selectedLeague.id
             return (
@@ -218,8 +218,8 @@ export default async function TyLeKeoPage(props: PageProps<'/ty-le-keo'>) {
                 href={`/ty-le-keo?league=${league.id}&bookmaker=${selectedBookmakerId}`}
                 className={`flex shrink-0 items-center gap-1.5 px-3 py-2.5 text-xs font-medium whitespace-nowrap transition-colors ${
                   isActive
-                    ? 'border-b-2 border-green-700 text-green-700 dark:text-green-400 bg-white dark:bg-gray-800'
-                    : 'text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-500'
+                    ? 'border-b-2 border-green-700 text-green-700 bg-white'
+                    : 'text-gray-500 hover:text-green-600'
                 }`}
               >
                 <div className="relative h-4 w-4 shrink-0">
@@ -238,13 +238,13 @@ export default async function TyLeKeoPage(props: PageProps<'/ty-le-keo'>) {
         </div>
 
         {/* Header bảng */}
-        <div className="bg-gray-800 dark:bg-gray-900 border-b border-gray-600 dark:border-gray-700">
+        <div className="bg-gray-800 border-b border-gray-600">
           <div className="flex items-center text-white text-[10px] font-semibold">
             <div className="flex-1 px-3 py-2">Trận đấu</div>
-            <div className="w-16 border-l border-gray-700 dark:border-gray-600 text-center py-2">Chấp</div>
-            <div className="w-14 border-l border-gray-700 dark:border-gray-600 text-center py-2">T/X</div>
-            <div className="w-12 border-l border-gray-700 dark:border-gray-600 text-center py-2">1×2</div>
-            <div className="w-8 border-l border-gray-700 dark:border-gray-600"></div>
+            <div className="w-16 border-l border-gray-700 text-center py-2">Chấp</div>
+            <div className="w-14 border-l border-gray-700 text-center py-2">T/X</div>
+            <div className="w-12 border-l border-gray-700 text-center py-2">1×2</div>
+            <div className="w-8 border-l border-gray-700"></div>
           </div>
         </div>
 

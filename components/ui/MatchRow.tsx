@@ -16,8 +16,8 @@ export default function MatchRow({ fixture, showDate = false }: Props) {
   return (
     <Link
       href={`/tran-dau/${f.id}`}
-      className={`flex items-center gap-2 px-3 py-2.5 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors border-b border-gray-50 dark:border-gray-700 last:border-0 ${
-        isLive ? 'bg-red-50/40 dark:bg-red-900/20' : ''
+      className={`flex items-center gap-2 px-3 py-2.5 hover:bg-green-50 transition-colors border-b border-gray-50 last:border-0 ${
+        isLive ? 'bg-red-50/40' : ''
       }`}
     >
       {/* Trạng thái / Giờ / Ngày */}
@@ -34,10 +34,10 @@ export default function MatchRow({ fixture, showDate = false }: Props) {
           <div className="relative h-4 w-4 shrink-0">
             <Image src={teams.home.logo} alt={teams.home.name} fill className="object-contain" sizes="16px" />
           </div>
-          <span className={`text-sm truncate ${isFinished && teams.home.winner ? 'font-semibold text-gray-900 dark:text-gray-100' : 'text-gray-700 dark:text-gray-300'}`}>
+          <span className={`text-sm truncate ${isFinished && teams.home.winner ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>
             {teams.home.name}
           </span>
-          <span className={`ml-auto text-sm font-bold tabular-nums ${isLive ? 'text-red-600 dark:text-red-400' : isFinished ? 'text-gray-900 dark:text-gray-100' : 'text-gray-300 dark:text-gray-600'}`}>
+          <span className={`ml-auto text-sm font-bold tabular-nums ${isLive ? 'text-red-600' : isFinished ? 'text-gray-900' : 'text-gray-300'}`}>
             {goals.home ?? '-'}
           </span>
         </div>
@@ -45,10 +45,10 @@ export default function MatchRow({ fixture, showDate = false }: Props) {
           <div className="relative h-4 w-4 shrink-0">
             <Image src={teams.away.logo} alt={teams.away.name} fill className="object-contain" sizes="16px" />
           </div>
-          <span className={`text-sm truncate ${isFinished && teams.away.winner ? 'font-semibold text-gray-900 dark:text-gray-100' : 'text-gray-700 dark:text-gray-300'}`}>
+          <span className={`text-sm truncate ${isFinished && teams.away.winner ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>
             {teams.away.name}
           </span>
-          <span className={`ml-auto text-sm font-bold tabular-nums ${isLive ? 'text-red-600 dark:text-red-400' : isFinished ? 'text-gray-900 dark:text-gray-100' : 'text-gray-300 dark:text-gray-600'}`}>
+          <span className={`ml-auto text-sm font-bold tabular-nums ${isLive ? 'text-red-600' : isFinished ? 'text-gray-900' : 'text-gray-300'}`}>
             {goals.away ?? '-'}
           </span>
         </div>

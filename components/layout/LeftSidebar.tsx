@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Trophy, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 
 const HOT_LEAGUES = [
   { id: 39,  name: 'Premier League',   country: 'England',  logo: 'https://media.api-sports.io/football/leagues/39.png' },
@@ -20,9 +20,9 @@ export default function LeftSidebar() {
     <aside className="hidden lg:flex flex-col w-[20%] min-w-[180px] max-w-[240px] shrink-0">
       <div className="sticky top-[72px] space-y-4">
         {/* Giải đấu hot */}
-        <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-2 bg-red-600 dark:bg-red-700 px-4 py-3">
-            <Star size={14} className="text-yellow-400 dark:text-yellow-300" />
+        <div className="rounded-xl bg-white shadow-sm overflow-hidden">
+          <div className="flex items-center gap-2 bg-red-600 px-4 py-3">
+            <Star size={14} className="text-yellow-400" />
             <h2 className="text-sm font-semibold text-white">Giải đấu hot</h2>
           </div>
           <ul>
@@ -30,14 +30,14 @@ export default function LeftSidebar() {
               <li key={league.id}>
                 <Link
                   href={league.id === 1 ? '/world-cup-2026' : `/giai-dau/${league.id}`}
-                  className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-50 transition-colors"
                 >
                   <div className="relative h-5 w-5 shrink-0">
                     <Image src={league.logo} alt={league.name} fill className="object-contain" sizes="20px" />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-gray-700 dark:text-gray-200">{league.name}</p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500">{league.country}</p>
+                    <p className="truncate text-sm font-medium text-gray-700">{league.name}</p>
+                    <p className="text-xs text-gray-400">{league.country}</p>
                   </div>
                 </Link>
               </li>

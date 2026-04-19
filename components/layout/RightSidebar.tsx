@@ -11,30 +11,30 @@ async function HotNews() {
     .from('articles')
     .select('id, title, slug, published_at')
     .eq('status', 'published')
-    .eq('content_type', 'article') // Chỉ lấy bài viết, không lấy page content
+    .eq('content_type', 'article')
     .order('published_at', { ascending: false })
     .limit(5)
 
   if (!articles || articles.length === 0) {
     return (
-      <div className="px-4 py-4 text-xs text-gray-400 dark:text-gray-500 text-center">Chưa có bài viết</div>
+      <div className="px-4 py-4 text-xs text-gray-400 text-center">Chưa có bài viết</div>
     )
   }
 
   return (
     <>
-      <ul className="divide-y divide-gray-50 dark:divide-gray-700">
+      <ul className="divide-y divide-gray-50">
         {articles.map((a) => (
           <li key={a.id}>
-            <Link href={`/nhan-dinh/${a.slug}`} className="block px-4 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-              <p className="text-sm font-medium text-gray-800 dark:text-gray-200 line-clamp-2 leading-snug">{a.title}</p>
-              <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">{formatArticleDate(a.published_at)}</p>
+            <Link href={`/nhan-dinh/${a.slug}`} className="block px-4 py-3 hover:bg-red-50 transition-colors">
+              <p className="text-sm font-medium text-gray-800 line-clamp-2 leading-snug">{a.title}</p>
+              <p className="mt-1 text-xs text-gray-400">{formatArticleDate(a.published_at)}</p>
             </Link>
           </li>
         ))}
       </ul>
-      <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-700">
-        <Link href="/nhan-dinh" className="text-xs font-medium text-green-700 dark:text-green-400 hover:underline">
+      <div className="px-4 py-2 border-t border-gray-100">
+        <Link href="/nhan-dinh" className="text-xs font-medium text-green-700 hover:underline">
           Xem tất cả →
         </Link>
       </div>
@@ -49,7 +49,7 @@ async function FeaturedOdds() {
     const featured = odds.slice(0, 3)
 
     if (featured.length === 0) {
-      return <div className="px-4 py-4 text-xs text-gray-400 dark:text-gray-500 text-center">Chưa có kèo</div>
+      return <div className="px-4 py-4 text-xs text-gray-400 text-center">Chưa có kèo</div>
     }
 
     // Fetch fixture details để lấy tên đội và logo
@@ -59,16 +59,16 @@ async function FeaturedOdds() {
     return (
       <>
         {/* Header bảng */}
-        <div className="bg-gray-800 dark:bg-gray-900 border-b border-gray-600 dark:border-gray-700">
+        <div className="bg-gray-800 border-b border-gray-600">
           <div className="flex items-center text-white text-[10px] font-semibold">
             <div className="flex-1 px-3 py-2">Trận đấu</div>
-            <div className="w-14 border-l border-gray-700 dark:border-gray-600 text-center py-2">Chấp</div>
-            <div className="w-12 border-l border-gray-700 dark:border-gray-600 text-center py-2">T/X</div>
-            <div className="w-10 border-l border-gray-700 dark:border-gray-600 text-center py-2">1×2</div>
+            <div className="w-14 border-l border-gray-700 text-center py-2">Chấp</div>
+            <div className="w-12 border-l border-gray-700 text-center py-2">T/X</div>
+            <div className="w-10 border-l border-gray-700 text-center py-2">1×2</div>
           </div>
         </div>
         
-        <ul className="divide-y divide-gray-50 dark:divide-gray-700">
+        <ul className="divide-y divide-gray-50">
           {featured.map((o, idx) => {
             const fixture = fixtures[idx]
             if (!fixture) return null
@@ -101,15 +101,15 @@ async function FeaturedOdds() {
             )
           })}
         </ul>
-        <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-700">
-          <Link href="/ty-le-keo" className="text-xs font-medium text-green-700 dark:text-green-400 hover:underline">
+        <div className="px-4 py-2 border-t border-gray-100">
+          <Link href="/ty-le-keo" className="text-xs font-medium text-green-700 hover:underline">
             Xem tất cả kèo →
           </Link>
         </div>
       </>
     )
   } catch {
-    return <div className="px-4 py-4 text-xs text-gray-400 dark:text-gray-500 text-center">Đang cập nhật...</div>
+    return <div className="px-4 py-4 text-xs text-gray-400 text-center">Đang cập nhật...</div>
   }
 }
 
@@ -118,8 +118,8 @@ export default function RightSidebar() {
     <aside className="hidden xl:flex flex-col w-[25%] min-w-[200px] max-w-[280px] shrink-0">
       <div className="sticky top-[72px] space-y-4">
         {/* Nhận định gần đây */}
-        <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-2 bg-red-600 dark:bg-red-700 px-4 py-3">
+        <div className="rounded-xl bg-white shadow-sm overflow-hidden">
+          <div className="flex items-center gap-2 bg-red-600 px-4 py-3">
             <Newspaper size={14} className="text-white" />
             <h2 className="text-sm font-semibold text-white">Nhận định gần đây</h2>
           </div>
@@ -127,11 +127,11 @@ export default function RightSidebar() {
         </div>
 
         {/* Kèo nổi bật */}
-        <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-2 bg-blue-700 dark:bg-blue-800 px-4 py-3">
+        <div className="rounded-xl bg-white shadow-sm overflow-hidden">
+          <div className="flex items-center gap-2 bg-blue-700 px-4 py-3">
             <TrendingUp size={14} className="text-white" />
             <h2 className="text-sm font-semibold text-white">Kèo nổi bật</h2>
-            <span className="ml-auto text-xs text-blue-200 dark:text-blue-300">Bet365</span>
+            <span className="ml-auto text-xs text-blue-200">Bet365</span>
           </div>
           <FeaturedOdds />
         </div>

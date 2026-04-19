@@ -10,7 +10,7 @@ interface Props {
 // Server Component - header phân nhóm trận theo giải đấu
 export default function LeagueGroupHeader({ leagueName, leagueLogo, country, round }: Props) {
   return (
-    <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-700 px-3 py-2 border-b border-gray-100 dark:border-gray-600">
+    <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 border-b border-gray-100">
       <div className="relative h-5 w-5 shrink-0">
         <Image
           src={leagueLogo}
@@ -20,9 +20,9 @@ export default function LeagueGroupHeader({ leagueName, leagueLogo, country, rou
           sizes="20px"
         />
       </div>
-      <span className="text-xs font-semibold text-gray-700 dark:text-gray-200 truncate">{country} · {leagueName}</span>
+      <span className="text-xs font-semibold text-gray-700 truncate">{country} · {leagueName}</span>
       {round && (
-        <span className="ml-auto text-xs text-gray-400 dark:text-gray-500 shrink-0">{round}</span>
+        <span className="ml-auto text-xs text-gray-400 shrink-0">{round}</span>
       )}
     </div>
   )

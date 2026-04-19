@@ -25,13 +25,13 @@ import ArticleCard from '@/components/ui/ArticleCard'
 
 export const metadata: Metadata = {
   title: 'BongDaWap - Cập nhật bóng đá 24/7',
-  description: 'Nơi cập nhật tin tức bóng đá nhanh nhất Việt Nam. Livescore trực tiếp, kết quả, bảng xếp hạng, tỷ lệ kèo và nhận định chuyên sâu.',
+  description: 'Nơi cập nhật tin tức bóng đá nhanh nhất Việt Nam. Livescore trực tiếp, kết qu�? bảng xếp hạng, t�?l�?kèo và nhận định chuyên sâu.',
 }
 
 // Hero Section với branding
 function HeroSection() {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-600 via-green-700 to-green-800 dark:from-green-700 dark:via-green-800 dark:to-green-900">
+    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-600 via-green-700 to-green-800">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-20">
         <div className="h-full w-full bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_50%)]"></div>
@@ -42,7 +42,7 @@ function HeroSection() {
           {/* Logo & Brand */}
           <div className="mb-6 flex items-center justify-center gap-3">
             <div className="rounded-full bg-white/10 p-3 backdrop-blur-sm">
-              <span className="text-3xl">⚽</span>
+              <span className="text-3xl">�?/span>
             </div>
             <div className="text-left">
               <h1 className="text-3xl font-bold text-white md:text-4xl">
@@ -57,7 +57,7 @@ function HeroSection() {
             Nơi cập nhật tin tức bóng đá nhanh nhất Việt Nam
           </h2>
           <p className="mb-8 text-green-100 md:text-lg">
-            Livescore trực tiếp, kết quả, bảng xếp hạng, tỷ lệ kèo và nhận định từ các chuyên gia hàng đầu
+            Livescore trực tiếp, kết qu�? bảng xếp hạng, t�?l�?kèo và nhận định t�?các chuyên gia hàng đầu
           </p>
 
           {/* CTA Buttons */}
@@ -93,14 +93,14 @@ function QuickStats() {
         { icon: Trophy, label: 'Giải đấu', value: '100+', color: 'text-yellow-500' },
         { icon: Users, label: 'Người dùng', value: '10K+', color: 'text-green-500' },
       ].map((stat, i) => (
-        <div key={i} className="rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div key={i} className="rounded-xl bg-white p-4 shadow-sm border border-gray-100">
           <div className="flex items-center gap-3">
-            <div className={`rounded-lg bg-gray-50 dark:bg-gray-700 p-2 ${stat.color}`}>
+            <div className={`rounded-lg bg-gray-50 p-2 ${stat.color}`}>
               <stat.icon size={20} />
             </div>
             <div>
-              <p className="text-lg font-bold text-gray-900 dark:text-gray-100">{stat.value}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</p>
+              <p className="text-lg font-bold text-gray-900">{stat.value}</p>
+              <p className="text-xs text-gray-500">{stat.label}</p>
             </div>
           </div>
         </div>
@@ -112,11 +112,11 @@ function QuickStats() {
 // Live Matches Preview
 async function LiveMatchesPreview() {
   const fixtures = await getLiveMatches()
-  const displayFixtures = fixtures.slice(0, 3) // Chỉ hiển thị 3 trận
+  const displayFixtures = fixtures.slice(0, 3) // Ch�?hiển th�?3 trận
 
   return (
-    <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-      <div className="flex items-center justify-between bg-red-600 dark:bg-red-700 px-4 py-3">
+    <div className="rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden">
+      <div className="flex items-center justify-between bg-red-600 px-4 py-3">
         <div className="flex items-center gap-2">
           <Activity size={16} className="text-white" />
           <h3 className="font-semibold text-white">Đang diễn ra</h3>
@@ -127,7 +127,7 @@ async function LiveMatchesPreview() {
           )}
         </div>
         <Link href="/livescore" className="text-xs text-red-100 hover:text-white">
-          Xem tất cả →
+          Xem tất c�?�?
         </Link>
       </div>
       
@@ -138,7 +138,7 @@ async function LiveMatchesPreview() {
           ))}
         </div>
       ) : (
-        <div className="px-4 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+        <div className="px-4 py-8 text-center text-sm text-gray-400">
           Hiện không có trận nào đang diễn ra
         </div>
       )}
@@ -157,25 +157,25 @@ async function FeaturedArticles() {
     .limit(4)
 
   return (
-    <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-      <div className="flex items-center justify-between bg-blue-600 dark:bg-blue-700 px-4 py-3">
+    <div className="rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden">
+      <div className="flex items-center justify-between bg-blue-600 px-4 py-3">
         <div className="flex items-center gap-2">
           <Star size={16} className="text-white" />
           <h3 className="font-semibold text-white">Nhận định nổi bật</h3>
         </div>
         <Link href="/nhan-dinh" className="text-xs text-blue-100 hover:text-white">
-          Xem tất cả →
+          Xem tất c�?�?
         </Link>
       </div>
       
       {articles && articles.length > 0 ? (
-        <div className="divide-y divide-gray-100 dark:divide-gray-700">
+        <div className="divide-y divide-gray-100">
           {articles.map((article) => (
             <ArticleCard key={article.id} article={article} variant="compact" />
           ))}
         </div>
       ) : (
-        <div className="px-4 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+        <div className="px-4 py-8 text-center text-sm text-gray-400">
           Chưa có bài viết nào
         </div>
       )}
@@ -190,40 +190,40 @@ async function HotOddsPreview() {
     const hotOdds = odds.slice(0, 3)
 
     return (
-      <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div className="flex items-center justify-between bg-orange-600 dark:bg-orange-700 px-4 py-3">
+      <div className="rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden">
+        <div className="flex items-center justify-between bg-orange-600 px-4 py-3">
           <div className="flex items-center gap-2">
             <TrendingUp size={16} className="text-white" />
             <h3 className="font-semibold text-white">Kèo hot Premier League</h3>
           </div>
           <Link href="/ty-le-keo" className="text-xs text-orange-100 hover:text-white">
-            Xem tất cả →
+            Xem tất c�?�?
           </Link>
         </div>
         
         {hotOdds.length > 0 ? (
           <div className="p-4 space-y-3">
             {hotOdds.map((odd, i) => (
-              <div key={odd.fixture.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <div key={odd.fixture.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  <p className="text-sm font-medium text-gray-900">
                     Trận #{i + 1}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-gray-500">
                     {new Date(odd.fixture.date).toLocaleDateString('vi-VN')}
                   </p>
                 </div>
                 <Link
                   href={`/tran-dau/${odd.fixture.id}`}
-                  className="text-xs text-orange-600 dark:text-orange-400 hover:underline"
+                  className="text-xs text-orange-600 hover:underline"
                 >
-                  Xem kèo →
+                  Xem kèo �?
                 </Link>
               </div>
             ))}
           </div>
         ) : (
-          <div className="px-4 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+          <div className="px-4 py-8 text-center text-sm text-gray-400">
             Đang cập nhật kèo...
           </div>
         )}
@@ -231,17 +231,17 @@ async function HotOddsPreview() {
     )
   } catch {
     return (
-      <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-        <div className="flex items-center justify-between bg-orange-600 dark:bg-orange-700 px-4 py-3">
+      <div className="rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden">
+        <div className="flex items-center justify-between bg-orange-600 px-4 py-3">
           <div className="flex items-center gap-2">
             <TrendingUp size={16} className="text-white" />
             <h3 className="font-semibold text-white">Kèo hot</h3>
           </div>
           <Link href="/ty-le-keo" className="text-xs text-orange-100 hover:text-white">
-            Xem tất cả →
+            Xem tất c�?�?
           </Link>
         </div>
-        <div className="px-4 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+        <div className="px-4 py-8 text-center text-sm text-gray-400">
           Đang cập nhật...
         </div>
       </div>
@@ -255,28 +255,28 @@ function FeaturesGrid() {
     {
       icon: Zap,
       title: 'Cập nhật Real-time',
-      description: 'Livescore và kết quả được cập nhật tức thời',
+      description: 'Livescore và kết qu�?được cập nhật tức thời',
       color: 'bg-yellow-500',
       href: '/livescore'
     },
     {
       icon: BarChart3,
       title: 'Thống kê chi tiết',
-      description: 'Bảng xếp hạng và số liệu đầy đủ',
+      description: 'Bảng xếp hạng và s�?liệu đầy đ�?,
       color: 'bg-blue-500',
       href: '/bang-xep-hang'
     },
     {
       icon: TrendingUp,
-      title: 'Tỷ lệ kèo chính xác',
-      description: 'Kèo từ các nhà cái uy tín nhất',
+      title: 'T�?l�?kèo chính xác',
+      description: 'Kèo t�?các nhà cái uy tín nhất',
       color: 'bg-green-500',
       href: '/ty-le-keo'
     },
     {
       icon: Globe,
       title: 'Giải đấu toàn cầu',
-      description: 'Theo dõi hơn 100 giải đấu trên thế giới',
+      description: 'Theo dõi hơn 100 giải đấu trên th�?giới',
       color: 'bg-purple-500',
       href: '/giai-dau/39'
     }
@@ -288,18 +288,18 @@ function FeaturesGrid() {
         <Link
           key={i}
           href={feature.href}
-          className="group rounded-xl bg-white dark:bg-gray-800 p-6 shadow-sm border border-gray-100 dark:border-gray-700 transition-all hover:shadow-md hover:scale-105"
+          className="group rounded-xl bg-white p-6 shadow-sm border border-gray-100 transition-all hover:shadow-md hover:scale-105"
         >
           <div className={`inline-flex rounded-lg ${feature.color} p-3 text-white mb-4`}>
             <feature.icon size={24} />
           </div>
-          <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+          <h3 className="font-semibold text-gray-900 mb-2">
             {feature.title}
           </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+          <p className="text-sm text-gray-600 mb-3">
             {feature.description}
           </p>
-          <div className="flex items-center text-sm font-medium text-green-600 dark:text-green-400 group-hover:gap-2 transition-all">
+          <div className="flex items-center text-sm font-medium text-green-600 group-hover:gap-2 transition-all">
             Khám phá
             <ArrowRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
@@ -312,11 +312,11 @@ function FeaturesGrid() {
 // Skeleton components
 function ContentSkeleton() {
   return (
-    <div className="rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-      <div className="h-12 bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+    <div className="rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden">
+      <div className="h-12 bg-gray-200 animate-pulse"></div>
       <div className="p-4 space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-16 bg-gray-100 dark:bg-gray-700 rounded animate-pulse"></div>
+          <div key={i} className="h-16 bg-gray-100 rounded animate-pulse"></div>
         ))}
       </div>
     </div>
@@ -364,10 +364,10 @@ export default function HomePage() {
       {/* Features Grid */}
       <div>
         <div className="mb-6 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
             Tính năng nổi bật
           </h2>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600">
             Khám phá những tính năng tuyệt vời của BongDaWap
           </p>
         </div>

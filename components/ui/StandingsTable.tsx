@@ -22,7 +22,7 @@ function FormDot({ result }: { result: string }) {
 export default function StandingsTable({ standings, leagueId }: Props) {
   if (!standings || standings.length === 0) {
     return (
-      <div className="px-4 py-10 text-center text-sm text-gray-400 dark:text-gray-500">
+      <div className="px-4 py-10 text-center text-sm text-gray-400">
         Chưa có dữ liệu bảng xếp hạng
       </div>
     )
@@ -36,13 +36,13 @@ export default function StandingsTable({ standings, leagueId }: Props) {
         <div key={groupIdx}>
           {/* Tên nhóm nếu có nhiều nhóm (Champions League group stage) */}
           {groups.length > 1 && table[0]?.group && (
-            <div className="bg-gray-50 dark:bg-gray-800 px-4 py-1.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+            <div className="bg-gray-50 px-4 py-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wide">
               {table[0].group}
             </div>
           )}
 
           {/* Header — thêm cột Form chỉ hiện trên sm+ */}
-          <div className="grid grid-cols-[28px_1fr_28px_28px_28px_28px_36px_32px] sm:grid-cols-[28px_1fr_60px_28px_28px_28px_28px_36px_32px] items-center px-3 py-1.5 text-[11px] font-medium text-gray-400 dark:text-gray-500">
+          <div className="grid grid-cols-[28px_1fr_28px_28px_28px_28px_36px_32px] sm:grid-cols-[28px_1fr_60px_28px_28px_28px_28px_36px_32px] items-center px-3 py-1.5 text-[11px] font-medium text-gray-400">
             <span className="text-center">#</span>
             <span className="pl-1">Đội bóng</span>
             <span className="hidden sm:block text-center">Phong độ</span>
@@ -51,7 +51,7 @@ export default function StandingsTable({ standings, leagueId }: Props) {
             <span className="text-center">H</span>
             <span className="text-center">B</span>
             <span className="text-center">HS</span>
-            <span className="text-center font-semibold text-gray-500 dark:text-gray-400">Đ</span>
+            <span className="text-center font-semibold text-gray-500">Đ</span>
           </div>
 
           {/* Rows */}
@@ -63,10 +63,10 @@ export default function StandingsTable({ standings, leagueId }: Props) {
                 <Link
                   key={row.team.id}
                   href={`/doi-bong/${row.team.id}?league=${leagueId}`}
-                  className="grid grid-cols-[28px_1fr_28px_28px_28px_28px_36px_32px] sm:grid-cols-[28px_1fr_60px_28px_28px_28px_28px_36px_32px] items-center px-3 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  className="grid grid-cols-[28px_1fr_28px_28px_28px_28px_36px_32px] sm:grid-cols-[28px_1fr_60px_28px_28px_28px_28px_36px_32px] items-center px-3 py-2.5 hover:bg-gray-50 transition-colors"
                 >
                   {/* Rank */}
-                  <span className="text-center text-xs font-semibold text-gray-400 dark:text-gray-500 tabular-nums">
+                  <span className="text-center text-xs font-semibold text-gray-400 tabular-nums">
                     {row.rank}
                   </span>
 
@@ -81,7 +81,7 @@ export default function StandingsTable({ standings, leagueId }: Props) {
                         sizes="20px"
                       />
                     </div>
-                    <span className="truncate text-xs font-medium text-gray-800 dark:text-gray-200">
+                    <span className="truncate text-xs font-medium text-gray-800">
                       {row.team.name}
                     </span>
                   </div>
@@ -92,14 +92,14 @@ export default function StandingsTable({ standings, leagueId }: Props) {
                   </div>
 
                   {/* Stats */}
-                  <span className="text-center text-xs text-gray-500 dark:text-gray-400 tabular-nums">{row.all.played}</span>
-                  <span className="text-center text-xs text-gray-500 dark:text-gray-400 tabular-nums">{row.all.win}</span>
-                  <span className="text-center text-xs text-gray-500 dark:text-gray-400 tabular-nums">{row.all.draw}</span>
-                  <span className="text-center text-xs text-gray-500 dark:text-gray-400 tabular-nums">{row.all.lose}</span>
-                  <span className="text-center text-xs text-gray-400 dark:text-gray-500 tabular-nums">
+                  <span className="text-center text-xs text-gray-500 tabular-nums">{row.all.played}</span>
+                  <span className="text-center text-xs text-gray-500 tabular-nums">{row.all.win}</span>
+                  <span className="text-center text-xs text-gray-500 tabular-nums">{row.all.draw}</span>
+                  <span className="text-center text-xs text-gray-500 tabular-nums">{row.all.lose}</span>
+                  <span className="text-center text-xs text-gray-400 tabular-nums">
                     {row.goalsDiff > 0 ? `+${row.goalsDiff}` : row.goalsDiff}
                   </span>
-                  <span className="text-center text-xs font-bold text-gray-900 dark:text-gray-100 tabular-nums">{row.points}</span>
+                  <span className="text-center text-xs font-bold text-gray-900 tabular-nums">{row.points}</span>
                 </Link>
               )
             })}

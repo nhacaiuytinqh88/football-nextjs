@@ -24,7 +24,7 @@ export function BookmakerSelect({
         params.set('league', currentLeague.toString())
         router.push(`${pathname}?${params.toString()}`)
       }}
-      className="text-xs border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+      className="text-xs border border-gray-300 rounded px-2 py-1 bg-white text-gray-900"
     >
       {bookmakers.map((bm) => (
         <option key={bm.id} value={bm.id}>

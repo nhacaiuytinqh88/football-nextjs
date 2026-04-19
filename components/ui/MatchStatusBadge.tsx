@@ -17,10 +17,10 @@ export default function MatchStatusBadge({ status, elapsed, date, showDate = fal
   if (['1H', '2H', 'ET', 'BT', 'P'].includes(status)) {
     return (
       <div className="flex flex-col items-center min-w-[44px]">
-        <span className="text-xs font-bold text-red-500 dark:text-red-400 animate-pulse leading-none">
+        <span className="text-xs font-bold text-red-500 animate-pulse leading-none">
           {elapsed}&apos;
         </span>
-        <span className="text-[10px] text-red-400 dark:text-red-500 font-medium">LIVE</span>
+        <span className="text-[10px] text-red-400 font-medium">LIVE</span>
       </div>
     )
   }
@@ -29,8 +29,8 @@ export default function MatchStatusBadge({ status, elapsed, date, showDate = fal
   if (status === 'HT') {
     return (
       <div className="flex flex-col items-center min-w-[44px]">
-        <span className="text-xs font-bold text-orange-500 dark:text-orange-400 leading-none">HT</span>
-        <span className="text-[10px] text-orange-400 dark:text-orange-500">Nghỉ</span>
+        <span className="text-xs font-bold text-orange-500 leading-none">HT</span>
+        <span className="text-[10px] text-orange-400">Nghỉ</span>
       </div>
     )
   }
@@ -39,12 +39,12 @@ export default function MatchStatusBadge({ status, elapsed, date, showDate = fal
   if (['FT', 'AET', 'PEN'].includes(status)) {
     return (
       <div className="flex flex-col items-center min-w-[44px]">
-        <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 leading-none">KT</span>
+        <span className="text-xs font-semibold text-gray-500 leading-none">KT</span>
         {status !== 'FT' && (
-          <span className="text-[10px] text-gray-400 dark:text-gray-500">{status}</span>
+          <span className="text-[10px] text-gray-400">{status}</span>
         )}
         {shouldShowDate && (
-          <span className="text-[10px] text-gray-400 dark:text-gray-500 leading-none mt-0.5">
+          <span className="text-[10px] text-gray-400 leading-none mt-0.5">
             {formatMatchDate(date)}
           </span>
         )}
@@ -57,9 +57,9 @@ export default function MatchStatusBadge({ status, elapsed, date, showDate = fal
     const time = formatMatchTime(date)
     return (
       <div className="flex flex-col items-center min-w-[44px]">
-        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 leading-none">{time}</span>
+        <span className="text-sm font-semibold text-gray-700 leading-none">{time}</span>
         {shouldShowDate && (
-          <span className="text-[10px] text-gray-400 dark:text-gray-500 leading-none mt-0.5">
+          <span className="text-[10px] text-gray-400 leading-none mt-0.5">
             {formatMatchDate(date)}
           </span>
         )}
@@ -72,9 +72,9 @@ export default function MatchStatusBadge({ status, elapsed, date, showDate = fal
     const label = status === 'PST' ? 'Hoãn' : 'Hủy'
     return (
       <div className="flex flex-col items-center min-w-[44px]">
-        <span className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 leading-none">{label}</span>
+        <span className="text-[10px] font-semibold text-gray-400 leading-none">{label}</span>
         {shouldShowDate && (
-          <span className="text-[10px] text-gray-400 dark:text-gray-500 leading-none mt-0.5">
+          <span className="text-[10px] text-gray-400 leading-none mt-0.5">
             {formatMatchDate(date)}
           </span>
         )}

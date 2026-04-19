@@ -13,20 +13,20 @@ export async function generateMetadata(): Promise<Metadata> {
   
   return {
     title: pageContent?.title || 'Livescore bóng đá trực tiếp',
-    description: pageContent?.excerpt || 'Theo dõi livescore bóng đá trực tiếp, kết quả các trận đấu đang diễn ra và sắp diễn ra hôm nay.',
+    description: pageContent?.excerpt || 'Theo dõi livescore bóng đá trực tiếp, kết qu�?các trận đấu đang diễn ra và sắp diễn ra hôm nay.',
   }
 }
 
 // --- Skeleton ---
 function MatchListSkeleton() {
   return (
-    <div className="divide-y divide-gray-50 dark:divide-gray-700">
+    <div className="divide-y divide-gray-50">
       {Array.from({ length: 6 }).map((_, i) => (
         <div key={i} className="flex items-center gap-3 px-3 py-3">
-          <div className="h-8 w-10 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="h-8 w-10 animate-pulse rounded bg-gray-200" />
           <div className="flex-1 space-y-2">
-            <div className="h-3 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
-            <div className="h-3 w-2/3 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="h-3 w-3/4 animate-pulse rounded bg-gray-200" />
+            <div className="h-3 w-2/3 animate-pulse rounded bg-gray-200" />
           </div>
         </div>
       ))}
@@ -34,17 +34,17 @@ function MatchListSkeleton() {
   )
 }
 
-// --- Live Section (Server Component, fetch từ Redis) ---
+// --- Live Section (Server Component, fetch t�?Redis) ---
 async function LiveSection() {
   const fixtures = await getLiveMatches()
 
   return (
-    <div className="rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
-      <div className="flex items-center gap-2 bg-green-700 dark:bg-green-800 px-4 py-3">
+    <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+      <div className="flex items-center gap-2 bg-green-700 px-4 py-3">
         <Activity size={15} className="text-white" />
         <h2 className="text-sm font-semibold text-white">Đang diễn ra</h2>
         {fixtures.length > 0 && (
-          <span className="ml-1 rounded-full bg-red-500 dark:bg-red-600 px-2 py-0.5 text-xs font-bold text-white animate-pulse">
+          <span className="ml-1 rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white animate-pulse">
             {fixtures.length} LIVE
           </span>
         )}
@@ -71,34 +71,34 @@ async function TodaySection() {
     <>
       {/* Sắp diễn ra */}
       {upcoming.length > 0 && (
-        <div className="rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-2 bg-blue-700 dark:bg-blue-800 px-4 py-3">
+        <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+          <div className="flex items-center gap-2 bg-blue-700 px-4 py-3">
             <Calendar size={15} className="text-white" />
             <h2 className="text-sm font-semibold text-white">Sắp diễn ra hôm nay</h2>
-            <span className="ml-auto text-xs text-blue-200 dark:text-blue-300">{upcoming.length} trận</span>
+            <span className="ml-auto text-xs text-blue-200">{upcoming.length} trận</span>
           </div>
           <FixtureList fixtures={upcoming} />
         </div>
       )}
 
-      {/* Kết quả hôm nay */}
+      {/* Kết qu�?hôm nay */}
       {finished.length > 0 && (
-        <div className="rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-2 bg-gray-600 dark:bg-gray-700 px-4 py-3">
-            <h2 className="text-sm font-semibold text-white">Kết quả hôm nay</h2>
-            <span className="ml-auto text-xs text-gray-300 dark:text-gray-400">{finished.length} trận</span>
+        <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+          <div className="flex items-center gap-2 bg-gray-600 px-4 py-3">
+            <h2 className="text-sm font-semibold text-white">Kết qu�?hôm nay</h2>
+            <span className="ml-auto text-xs text-gray-300">{finished.length} trận</span>
           </div>
           <FixtureList fixtures={finished} />
         </div>
       )}
 
       {upcoming.length === 0 && finished.length === 0 && (
-        <div className="rounded-xl border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-2 bg-gray-600 dark:bg-gray-700 px-4 py-3">
+        <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+          <div className="flex items-center gap-2 bg-gray-600 px-4 py-3">
             <Calendar size={15} className="text-white" />
             <h2 className="text-sm font-semibold text-white">Lịch thi đấu hôm nay</h2>
           </div>
-          <div className="px-4 py-10 text-center text-sm text-gray-400 dark:text-gray-500">
+          <div className="px-4 py-10 text-center text-sm text-gray-400">
             Không có trận đấu nào hôm nay
           </div>
         </div>
@@ -133,7 +133,7 @@ export default async function LivescorePage() {
         <TodaySection />
       </Suspense>
 
-      {/* Nội dung CMS - hiển thị ở cuối trang */}
+      {/* Nội dung CMS - hiển th�?�?cuối trang */}
       {pageContent && (
         <PageContentSection content={pageContent} />
       )}

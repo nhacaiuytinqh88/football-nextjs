@@ -11,7 +11,7 @@ interface Props {
 export default function FixtureList({ fixtures, emptyMessage = 'Không có trận đấu nào', showDate = false }: Props) {
   if (fixtures.length === 0) {
     return (
-      <div className="px-4 py-10 text-center text-sm text-gray-400 dark:text-gray-500">
+      <div className="px-4 py-10 text-center text-sm text-gray-400">
         {emptyMessage}
       </div>
     )
