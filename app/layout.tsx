@@ -59,7 +59,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" className="h-full">
-      <body className="min-h-full bg-gray-100 dark:bg-gray-900 antialiased">
+      <body className="min-h-full bg-gray-100 antialiased">
         <ThemeProvider>
           {/* Header - sticky top */}
           <Header />
