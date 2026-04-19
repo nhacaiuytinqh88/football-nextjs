@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Search, Bell } from 'lucide-react'
 import ThemeToggle from '@/components/ui/ThemeToggle'
 
@@ -9,7 +10,13 @@ export default function Header() {
       <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <span className="text-yellow-400 dark:text-yellow-300">⚽</span>
+          <Image
+            src="/bongdawap-logo-techshift.png"
+            alt="BongDaWap Logo"
+            width={32}
+            height={32}
+            className="rounded-md"
+          />
           <span className="hidden sm:inline">BongDa<span className="text-yellow-400 dark:text-yellow-300">Wap</span></span>
           <span className="sm:hidden">BD<span className="text-yellow-400 dark:text-yellow-300">W</span></span>
         </Link>
